@@ -130,17 +130,16 @@ export default function CategoryItem({
       
       <CardContent className="px-3 pt-0 pb-3 sm:px-4 sm:pb-4">
         <div className="mb-2 flex justify-between items-center">
-          <div className="flex items-center">
-            <FileText className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-gray-400 mr-1 sm:mr-1.5" />
-            <h3 className="text-xs font-medium text-gray-400">Recursos</h3>
-          </div>
+          <Badge className="h-6 px-2.5 bg-primary/15 text-primary border-0 font-medium">
+            {resources.length} {resources.length === 1 ? 'recurso' : 'recursos'}
+          </Badge>
           <Button
             size="sm"
             variant="default"
-            className="h-6 sm:h-7 bg-primary text-white hover:bg-primary/90 flex items-center px-2 sm:px-3 text-xs rounded-md"
+            className="h-7 bg-primary text-white hover:bg-primary/90 flex items-center px-2.5 sm:px-3 text-xs rounded-md"
             onClick={handleAddResourceClick}
           >
-            <Plus className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1 sm:mr-1.5" />
+            <Plus className="h-3.5 w-3.5 mr-1.5" />
             <span className="whitespace-nowrap font-medium">Adicionar</span>
           </Button>
         </div>

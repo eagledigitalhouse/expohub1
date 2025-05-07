@@ -168,14 +168,14 @@ export default function CategoryTable({
                   </TableCell>
                   <TableCell className="p-2">
                     <div className="flex items-center">
-                      <div className="h-7 w-7 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-2">
-                        <CategoryIcon className="h-3.5 w-3.5" />
+                      <div className="h-8 w-8 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-3">
+                        <CategoryIcon className="h-4 w-4" />
                       </div>
                       <span className="font-medium text-white">{category.name}</span>
                     </div>
                   </TableCell>
                   <TableCell className="p-2">
-                    <Badge variant="outline" className="text-xs py-0 h-5 bg-dark/80 border-primary/30 text-primary/80">
+                    <Badge className="h-6 px-2.5 bg-primary/15 text-primary border-0 font-medium">
                       {resources.length} {resources.length === 1 ? 'recurso' : 'recursos'}
                     </Badge>
                   </TableCell>
@@ -187,16 +187,17 @@ export default function CategoryTable({
                   <TableCell className="p-2">
                     <div className="flex justify-center space-x-1">
                       <Button
-                        size="icon"
-                        variant="ghost"
-                        className="h-7 w-7 text-gray-400 hover:text-primary"
+                        size="sm"
+                        variant="default"
+                        className="h-7 bg-primary text-white hover:bg-primary/90 flex items-center px-2 rounded-md"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleAddResourceClick(category.id);
                         }}
                         title="Adicionar recurso"
                       >
-                        <Plus className="h-3.5 w-3.5" />
+                        <Plus className="h-3.5 w-3.5 mr-1" />
+                        <span className="font-medium text-xs">Adicionar</span>
                       </Button>
                       <Button
                         size="icon"

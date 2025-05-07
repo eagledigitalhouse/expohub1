@@ -92,17 +92,15 @@ export default function CategoryAccordion({
         <AccordionItem value={category.id.toString()} className="border-dark-border bg-dark-surface rounded-lg overflow-hidden mb-0">
           <AccordionTrigger className="px-4 py-3 hover:no-underline">
             <div className="flex items-center justify-between w-full">
-              <div className="flex items-center">
-                <div className="h-8 w-8 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-3">
-                  <CategoryIcon className="h-4 w-4" />
+              <div className="flex items-start">
+                <div className="h-9 w-9 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-3 mt-0.5">
+                  <CategoryIcon className="h-5 w-5" />
                 </div>
                 <div className="text-left">
-                  <div className="text-base font-medium text-white">{category.name}</div>
-                  <div className="flex items-center mt-0.5">
-                    <Badge variant="outline" className="text-xs py-0 h-5 bg-dark/80 border-primary/30 text-primary/80">
-                      {resources.length} {resources.length === 1 ? 'recurso' : 'recursos'}
-                    </Badge>
-                  </div>
+                  <div className="text-lg font-medium text-white leading-5 mb-1.5">{category.name}</div>
+                  <Badge className="h-6 px-2.5 bg-primary/15 text-primary border-0 font-medium">
+                    {resources.length} {resources.length === 1 ? 'recurso' : 'recursos'}
+                  </Badge>
                 </div>
               </div>
               
@@ -130,18 +128,15 @@ export default function CategoryAccordion({
           </AccordionTrigger>
           <AccordionContent className="pb-3 px-4">
             <div className="mb-2 flex justify-between items-center">
-              <div className="flex items-center">
-                <FileText className="h-3.5 w-3.5 text-gray-400 mr-1.5" />
-                <h3 className="text-xs font-medium text-gray-400">Recursos</h3>
-              </div>
+              <div className="w-4"></div>
               <Button
                 size="sm"
-                variant="ghost"
-                className="h-7 text-primary hover:text-primary-light hover:bg-primary/5 flex items-center px-2 text-xs"
+                variant="default"
+                className="h-7 bg-primary text-white hover:bg-primary/90 flex items-center px-2.5 sm:px-3 text-xs rounded-md"
                 onClick={handleAddResourceClick}
               >
-                <Plus className="h-3.5 w-3.5 mr-1" />
-                Adicionar
+                <Plus className="h-3.5 w-3.5 mr-1.5" />
+                <span className="whitespace-nowrap font-medium">Adicionar</span>
               </Button>
             </div>
 

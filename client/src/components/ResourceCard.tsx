@@ -57,8 +57,7 @@ export default function ResourceCard({ resource, icon: Icon, onClick }: Resource
               {tags.map((tag, index) => (
                 <Badge 
                   key={index} 
-                  variant="outline" 
-                  className="bg-dark border-primary/30 text-primary/90 text-xs"
+                  className="h-6 px-2.5 bg-primary/15 text-primary border-0 font-medium text-xs"
                 >
                   {tag}
                 </Badge>
