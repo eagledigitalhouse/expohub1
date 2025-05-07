@@ -127,27 +127,30 @@ export default function Admin() {
                 </Button>
               </div>
               
-              <div className="space-y-8">
+              <div>
                 {categories?.length > 0 ? (
-                  categories.map((category: Category) => (
-                    <CategoryItem
-                      key={category.id}
-                      category={category}
-                      resources={getResourcesByCategory(category.id)}
-                      onEditResource={handleEditResource}
-                      onAddResource={handleAddResource}
-                    />
-                  ))
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {categories.map((category: Category) => (
+                      <CategoryItem
+                        key={category.id}
+                        category={category}
+                        resources={getResourcesByCategory(category.id)}
+                        onEditResource={handleEditResource}
+                        onAddResource={handleAddResource}
+                      />
+                    ))}
+                  </div>
                 ) : (
-                  <div className="bg-dark-surface border border-dark-border rounded-lg p-6 text-center">
-                    <p className="text-gray-400 mb-4">Nenhuma categoria encontrada.</p>
+                  <div className="bg-dark-surface border border-dark-border rounded-lg p-6 text-center max-w-md mx-auto">
+                    <div className="text-4xl mb-3">📋</div>
+                    <h3 className="text-xl font-medium text-white mb-2">Nenhuma categoria</h3>
+                    <p className="text-gray-400 mb-4">Crie sua primeira categoria para começar a organizar seus recursos.</p>
                     <Button 
                       onClick={handleAddCategory}
-                      variant="outline"
-                      className="border-primary text-primary hover:bg-primary/10"
+                      className="bg-primary hover:bg-primary/90 text-white"
                     >
                       <Plus className="mr-2 h-5 w-5" />
-                      Criar primeira categoria
+                      Criar Primeira Categoria
                     </Button>
                   </div>
                 )}
