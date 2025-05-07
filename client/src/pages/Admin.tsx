@@ -20,6 +20,7 @@ import CategoryList from "@/components/admin/CategoryList";
 import SortableResourceList from "@/components/admin/SortableResourceList";
 import DraggableResourceList from "@/components/admin/DraggableResourceList";
 import TrelloBoard from "@/components/admin/TrelloBoard";
+import ThemeSettingsPanel from "@/components/admin/ThemeSettingsPanel";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -210,6 +211,12 @@ export default function Admin() {
                   </div>
                 )}
               </div>
+            </div>
+          )}
+          
+          {activePage === "themes" && (
+            <div className="py-6 px-4 sm:px-6 lg:px-8 flex-1">
+              <ThemeSettingsPanel />
             </div>
           )}
           

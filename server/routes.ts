@@ -257,6 +257,119 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Theme Settings Endpoints (White Label)
+  app.get("/api/theme-settings", async (req, res) => {
+    const themes = await storage.getThemeSettings();
+    res.json(themes);
+  });
+
+  app.get("/api/theme-settings/active", async (req, res) => {
+    const theme = await storage.getActiveThemeSetting();
+    if (!theme) {
+      return res.status(404).json({ message: "No active theme found" });
+    }
+    res.json(theme);
+  });
+
+  app.get("/api/theme-settings/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "Invalid theme ID" });
+    }
+
+    const theme = await storage.getThemeSettingById(id);
+    if (!theme) {
+      return res.status(404).json({ message: "Theme not found" });
+    }
+    res.json(theme);
+  });
+
+  app.post("/api/theme-settings", async (req, res) => {
+    try {
+      const themeSettingSchema = z.object({
+        name: z.string().min(1, "Theme name is required"),
+        primaryColor: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Invalid color format"),
+        backgroundColor: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Invalid color format"),
+        surfaceColor: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Invalid color format"),
+        borderColor: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Invalid color format"),
+        textColor: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Invalid color format"),
+        logoUrl: z.string().optional().nullable(),
+        isActive: z.boolean().optional()
+      });
+      
+      const validatedData = themeSettingSchema.parse(req.body);
+      const theme = await storage.createThemeSetting(validatedData);
+      res.status(201).json(theme);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid theme data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create theme" });
+    }
+  });
+
+  app.put("/api/theme-settings/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "Invalid theme ID" });
+    }
+
+    try {
+      const themeSettingSchema = z.object({
+        name: z.string().min(1).optional(),
+        primaryColor: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).optional(),
+        backgroundColor: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).optional(),
+        surfaceColor: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).optional(),
+        borderColor: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).optional(),
+        textColor: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).optional(),
+        logoUrl: z.string().optional().nullable(),
+        isActive: z.boolean().optional()
+      });
+      
+      const validatedData = themeSettingSchema.parse(req.body);
+      const theme = await storage.updateThemeSetting(id, validatedData);
+      
+      if (!theme) {
+        return res.status(404).json({ message: "Theme not found" });
+      }
+      
+      res.json(theme);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid theme data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update theme" });
+    }
+  });
+
+  app.delete("/api/theme-settings/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "Invalid theme ID" });
+    }
+
+    const success = await storage.deleteThemeSetting(id);
+    if (!success) {
+      return res.status(404).json({ message: "Theme not found or is currently active" });
+    }
+
+    res.status(204).end();
+  });
+
+  app.post("/api/theme-settings/:id/activate", async (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "Invalid theme ID" });
+    }
+
+    const theme = await storage.setActiveThemeSetting(id);
+    if (!theme) {
+      return res.status(404).json({ message: "Theme not found" });
+    }
+
+    res.json(theme);
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

@@ -4,6 +4,7 @@ import {
   Package,
   Users,
   BarChart,
+  Palette,
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -29,6 +30,17 @@ export default function AdminSidebar({ activePage, onPageChange }: AdminSidebarP
           >
             <Package className="h-5 w-5 mr-2" />
             Categorias e Recursos
+          </button>
+          <button 
+            onClick={() => onPageChange("themes")}
+            className={`w-full flex items-center px-3 py-2 text-sm font-medium ${
+              activePage === "themes" 
+                ? "bg-primary/10 text-primary" 
+                : "text-gray-300 hover:text-white hover:bg-dark-border"
+            } rounded-md`}
+          >
+            <Palette className="h-5 w-5 mr-2" />
+            Temas
           </button>
           <button 
             onClick={() => onPageChange("settings")}
