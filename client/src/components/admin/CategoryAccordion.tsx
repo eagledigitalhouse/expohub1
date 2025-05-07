@@ -96,10 +96,10 @@ export default function CategoryAccordion({
                 <div className="h-9 w-9 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-3 mt-0.5">
                   <CategoryIcon className="h-5 w-5" />
                 </div>
-                <div className="text-left">
-                  <div className="text-lg font-medium text-white leading-5 mb-1.5">{category.name}</div>
-                  <Badge className="h-6 px-2.5 bg-primary/15 text-primary border-0 font-medium">
-                    {resources.length} {resources.length === 1 ? 'recurso' : 'recursos'}
+                <div className="text-left flex items-center">
+                  <div className="text-lg font-medium text-white leading-5">{category.name}</div>
+                  <Badge className="ml-2 h-5 px-2 bg-primary/15 text-primary border-0 font-medium text-xs">
+                    {resources.length}
                   </Badge>
                 </div>
               </div>
@@ -127,15 +127,14 @@ export default function CategoryAccordion({
             </div>
           </AccordionTrigger>
           <AccordionContent className="pb-3 px-4">
-            <div className="mb-2 flex justify-between items-center">
-              <div className="w-4"></div>
+            <div className="mb-2 flex justify-end">
               <Button
                 size="sm"
                 variant="default"
-                className="h-7 bg-primary text-white hover:bg-primary/90 flex items-center px-2.5 sm:px-3 text-xs rounded-md"
+                className="h-7 bg-primary text-white hover:bg-primary/90 flex items-center px-3.5 text-xs rounded-md"
                 onClick={handleAddResourceClick}
               >
-                <Plus className="h-3.5 w-3.5 mr-1.5" />
+                <Plus className="h-3.5 w-3.5 mr-2" />
                 <span className="whitespace-nowrap font-medium">Adicionar</span>
               </Button>
             </div>

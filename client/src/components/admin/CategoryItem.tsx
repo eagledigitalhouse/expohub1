@@ -93,15 +93,13 @@ export default function CategoryItem({
             <div className="h-9 w-9 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-3 flex-shrink-0 mt-0.5">
               <CategoryIcon className="h-5 w-5" />
             </div>
-            <div className="min-w-0">
-              <CardTitle className="text-base sm:text-lg text-white truncate leading-5 mb-1.5" title={category.name}>
+            <div className="min-w-0 flex items-center">
+              <CardTitle className="text-base sm:text-lg text-white truncate leading-5" title={category.name}>
                 {category.name}
               </CardTitle>
-              <div className="flex items-center">
-                <Badge variant="outline" className="text-xs py-0 h-5 bg-dark/80 border-primary/30 text-primary/80">
-                  {resources.length} {resources.length === 1 ? 'recurso' : 'recursos'}
-                </Badge>
-              </div>
+              <Badge className="ml-2 h-5 px-2 bg-primary/15 text-primary border-0 font-medium text-xs">
+                {resources.length}
+              </Badge>
             </div>
           </div>
           
@@ -129,17 +127,14 @@ export default function CategoryItem({
       </CardHeader>
       
       <CardContent className="px-3 pt-0 pb-3 sm:px-4 sm:pb-4">
-        <div className="mb-2 flex justify-between items-center">
-          <Badge className="h-6 px-2.5 bg-primary/15 text-primary border-0 font-medium">
-            {resources.length} {resources.length === 1 ? 'recurso' : 'recursos'}
-          </Badge>
+        <div className="mb-2 flex justify-end">
           <Button
             size="sm"
             variant="default"
-            className="h-7 bg-primary text-white hover:bg-primary/90 flex items-center px-2.5 sm:px-3 text-xs rounded-md"
+            className="h-7 bg-primary text-white hover:bg-primary/90 flex items-center px-3.5 text-xs rounded-md"
             onClick={handleAddResourceClick}
           >
-            <Plus className="h-3.5 w-3.5 mr-1.5" />
+            <Plus className="h-3.5 w-3.5 mr-2" />
             <span className="whitespace-nowrap font-medium">Adicionar</span>
           </Button>
         </div>
