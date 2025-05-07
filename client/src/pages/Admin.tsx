@@ -201,11 +201,8 @@ export default function Admin() {
                         categories={categories}
                         getResourcesByCategory={getResourcesByCategory}
                         onEditResource={handleEditResource}
-                        onResourceMove={(resourceId, fromCategoryId, toCategoryId) => {
-                          toast({
-                            title: "Recurso movido",
-                            description: "O recurso foi movido para outra categoria com sucesso.",
-                          });
+                        onMoveResource={(resourceId, targetCategoryId) => {
+                          console.log(`Movendo recurso ${resourceId} para categoria ${targetCategoryId}`);
                         }}
                       />
                     )}

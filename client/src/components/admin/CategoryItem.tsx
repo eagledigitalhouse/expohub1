@@ -97,15 +97,14 @@ export default function CategoryItem({
               <CardTitle className="text-lg text-white truncate leading-tight" title={category.name}>
                 {category.name}
               </CardTitle>
-              <div className="flex items-center mt-1">
-                <Badge className="h-6 px-2.5 bg-primary/15 text-primary border-0 font-medium text-xs">
-                  {resources.length} recurso{resources.length !== 1 ? 's' : ''}
-                </Badge>
-              </div>
             </div>
           </div>
           
-          <div className="flex space-x-1 flex-shrink-0">
+          <div className="flex items-center space-x-2 flex-shrink-0">
+            <div className="h-6 w-6 rounded-full bg-primary/15 flex items-center justify-center text-primary">
+              <span className="text-xs font-medium">{resources.length}</span>
+            </div>
+            
             <Button
               size="icon"
               variant="ghost"
@@ -133,19 +132,10 @@ export default function CategoryItem({
                 data-category-id={category.id} 
                 className="resource-item group hover:cursor-grab active:cursor-grabbing"
               >
-                <div className="relative">
-                  <div className="absolute left-3 top-0 bottom-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                    <div className="flex flex-col space-y-1">
-                      <div className="w-4 h-0.5 bg-gray-400 rounded-full"></div>
-                      <div className="w-4 h-0.5 bg-gray-400 rounded-full"></div>
-                      <div className="w-4 h-0.5 bg-gray-400 rounded-full"></div>
-                    </div>
-                  </div>
-                  <ResourceItem 
-                    resource={resource}
-                    onEdit={() => onEditResource(resource)}
-                  />
-                </div>
+                <ResourceItem 
+                  resource={resource}
+                  onEdit={() => onEditResource(resource)}
+                />
               </div>
             ))}
           </div>

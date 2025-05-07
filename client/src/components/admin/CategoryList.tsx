@@ -212,6 +212,7 @@ export default function CategoryList({
     }
     
     const activeId = active.id.toString();
+    const overId = over.id.toString();
     
     // Se estamos reordenando categorias
     if (!activeId.startsWith('resource-') && active.id !== over.id) {
@@ -230,31 +231,49 @@ export default function CategoryList({
       });
     }
     // Se estamos movendo um recurso entre categorias
-    else if (activeId.startsWith('resource-') && overCategoryId !== null) {
+    else if (activeId.startsWith('resource-')) {
+      // Determinar o ID do recurso sendo arrastado
       const resourceId = parseInt(activeId.split('-')[1]);
       const resourceData = active.data.current as any;
       
-      if (resourceData && resourceData.categoryId !== overCategoryId) {
-        try {
-          // Atualizar no backend
-          await apiRequest("PATCH", `/api/resources/${resourceId}`, {
-            categoryId: overCategoryId
-          });
-          
-          // Invalidar queries
-          queryClient.invalidateQueries({ queryKey: ["/api/resources"] });
-          
-          toast({
-            title: "Recurso movido",
-            description: "O recurso foi movido para outra categoria.",
-          });
-        } catch (error) {
-          toast({
-            title: "Erro ao mover recurso",
-            description: "Ocorreu um erro ao mover o recurso para outra categoria.",
-            variant: "destructive",
-          });
+      // Determinar a categoria de destino
+      let targetCategoryId = overCategoryId;
+      
+      // Se o recurso foi solto sobre outro recurso, pegamos a categoria desse recurso
+      if (overId.startsWith('resource-')) {
+        const overData = over.data.current as any;
+        if (overData && overData.categoryId) {
+          targetCategoryId = overData.categoryId;
         }
+      }
+      
+      // Se a categoria destino não for encontrada ou for a mesma, não fazemos nada
+      if (!targetCategoryId || (resourceData && resourceData.categoryId === targetCategoryId)) {
+        setActiveId(null);
+        setActiveResource(null);
+        setOverCategoryId(null);
+        return;
+      }
+      
+      try {
+        // Atualizar no backend
+        await apiRequest("PATCH", `/api/resources/${resourceId}`, {
+          categoryId: targetCategoryId
+        });
+        
+        // Invalidar queries
+        queryClient.invalidateQueries({ queryKey: ["/api/resources"] });
+        
+        toast({
+          title: "Recurso movido",
+          description: "O recurso foi movido para outra categoria.",
+        });
+      } catch (error) {
+        toast({
+          title: "Erro ao mover recurso",
+          description: "Ocorreu um erro ao mover o recurso para outra categoria.",
+          variant: "destructive",
+        });
       }
     }
     
