@@ -25,7 +25,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 export default function Admin() {
   const [, navigate] = useLocation();
   const [activePage, setActivePage] = useState("resources");
-  const [viewMode, setViewMode] = useState<"cards" | "accordion" | "table">("cards");
+  const [viewMode, setViewMode] = useState<"cards" | "accordion" | "table" | "draggable">("cards");
   const [showNewCategoryForm, setShowNewCategoryForm] = useState(false);
   const [editingResource, setEditingResource] = useState<Resource | null>(null);
   const [showResourceEditor, setShowResourceEditor] = useState(false);
@@ -192,6 +192,21 @@ export default function Admin() {
                         getResourcesByCategory={getResourcesByCategory}
                         onEditResource={handleEditResource}
                         onAddResource={handleAddResource}
+                      />
+                    )}
+                    
+                    {/* Draggable View - Permite arrastar recursos entre categorias */}
+                    {viewMode === "draggable" && (
+                      <DraggableResourceList
+                        categories={categories}
+                        getResourcesByCategory={getResourcesByCategory}
+                        onEditResource={handleEditResource}
+                        onResourceMove={(resourceId, fromCategoryId, toCategoryId) => {
+                          toast({
+                            title: "Recurso movido",
+                            description: "O recurso foi movido para outra categoria com sucesso.",
+                          });
+                        }}
                       />
                     )}
                   </>
