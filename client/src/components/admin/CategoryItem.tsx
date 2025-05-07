@@ -86,16 +86,18 @@ export default function CategoryItem({
   };
   
   return (
-    <Card className="bg-dark-surface border-dark-border w-full max-w-md">
-      <CardHeader className="p-4">
-        <div className="flex justify-between items-center">
+    <Card className="bg-dark-surface border-dark-border h-full overflow-hidden">
+      <CardHeader className="p-4 pb-3">
+        <div className="flex justify-between items-start">
           <div className="flex items-center">
             <div className="h-9 w-9 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-3 flex-shrink-0">
-              <CategoryIcon className="h-4.5 w-4.5" />
+              <CategoryIcon className="h-5 w-5" />
             </div>
             <div>
-              <CardTitle className="text-lg text-white">{category.name}</CardTitle>
-              <div className="flex items-center mt-0.5">
+              <CardTitle className="text-lg text-white truncate" title={category.name}>
+                {category.name}
+              </CardTitle>
+              <div className="flex items-center mt-1">
                 <Badge variant="outline" className="text-xs py-0 h-5 bg-dark/80 border-primary/30 text-primary/80">
                   {resources.length} {resources.length === 1 ? 'recurso' : 'recursos'}
                 </Badge>
@@ -103,24 +105,24 @@ export default function CategoryItem({
             </div>
           </div>
           
-          <div className="flex space-x-1">
+          <div className="flex space-x-1 ml-2">
             <Button
               size="icon"
               variant="ghost"
-              className="h-8 w-8 text-gray-400 hover:text-primary hover:bg-primary/5"
+              className="h-7 w-7 text-gray-400 hover:text-primary hover:bg-primary/5"
               onClick={handleEditClick}
               title="Editar categoria"
             >
-              <Edit className="h-4 w-4" />
+              <Edit className="h-3.5 w-3.5" />
             </Button>
             <Button
               size="icon"
               variant="ghost"
-              className="h-8 w-8 text-gray-400 hover:text-destructive hover:bg-destructive/5"
+              className="h-7 w-7 text-gray-400 hover:text-destructive hover:bg-destructive/5"
               onClick={handleDeleteClick}
               title="Excluir categoria"
             >
-              <Trash className="h-4 w-4" />
+              <Trash className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>
