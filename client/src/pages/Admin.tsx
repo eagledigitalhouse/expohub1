@@ -201,8 +201,27 @@ export default function Admin() {
                         categories={categories}
                         getResourcesByCategory={getResourcesByCategory}
                         onEditResource={handleEditResource}
-                        onMoveResource={(resourceId, targetCategoryId) => {
-                          console.log(`Movendo recurso ${resourceId} para categoria ${targetCategoryId}`);
+                        onMoveResource={async (resourceId, targetCategoryId) => {
+                          try {
+                            // Atualizar no backend
+                            await apiRequest("PATCH", `/api/resources/${resourceId}`, {
+                              categoryId: targetCategoryId
+                            });
+                            
+                            // Invalidar queries
+                            queryClient.invalidateQueries({ queryKey: ["/api/resources"] });
+                            
+                            toast({
+                              title: "Recurso movido",
+                              description: "O recurso foi movido para outra categoria com sucesso.",
+                            });
+                          } catch (error) {
+                            toast({
+                              title: "Erro ao mover recurso",
+                              description: "Ocorreu um erro ao mover o recurso para outra categoria.",
+                              variant: "destructive",
+                            });
+                          }
                         }}
                       />
                     )}

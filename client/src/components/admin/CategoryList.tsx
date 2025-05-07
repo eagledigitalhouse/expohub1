@@ -319,7 +319,10 @@ export default function CategoryList({
         </SortableContext>
       </div>
       
-      <DragOverlay>
+      <DragOverlay adjustScale={true} dropAnimation={{
+        duration: 150,
+        easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
+      }}>
         {activeId && !activeId.startsWith('resource-') && (
           <div className="opacity-90 w-full max-w-sm">
             <SortableCategory
@@ -331,7 +334,7 @@ export default function CategoryList({
           </div>
         )}
         {activeId && activeResource && activeId.startsWith('resource-') && (
-          <div className="opacity-90 w-full max-w-sm shadow-xl">
+          <div className="opacity-95 w-full max-w-sm shadow-lg">
             <ResourceItem 
               resource={activeResource}
               onEdit={() => {}}
