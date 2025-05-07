@@ -127,7 +127,23 @@ export default function CategoryAccordion({
             </div>
           </AccordionTrigger>
           <AccordionContent className="pb-3 px-4">
-            <div className="mb-2 flex justify-end">
+            {resources.length === 0 ? (
+              <div className="text-center py-3 px-3 bg-dark/50 border border-dashed border-dark-border rounded-lg mb-3">
+                <p className="text-gray-500 text-xs">Nenhum recurso nesta categoria</p>
+              </div>
+            ) : (
+              <div className="grid gap-1.5 mb-3">
+                {resources.map((resource) => (
+                  <ResourceItem 
+                    key={resource.id} 
+                    resource={resource}
+                    onEdit={() => onEditResource(resource)}
+                  />
+                ))}
+              </div>
+            )}
+            
+            <div className="flex justify-center mt-2 pt-1">
               <Button
                 size="sm"
                 variant="default"
@@ -138,22 +154,6 @@ export default function CategoryAccordion({
                 <span className="whitespace-nowrap font-medium">Adicionar</span>
               </Button>
             </div>
-
-            {resources.length === 0 ? (
-              <div className="text-center py-3 px-3 bg-dark/50 border border-dashed border-dark-border rounded-lg">
-                <p className="text-gray-500 text-xs">Nenhum recurso nesta categoria</p>
-              </div>
-            ) : (
-              <div className="grid gap-1.5">
-                {resources.map((resource) => (
-                  <ResourceItem 
-                    key={resource.id} 
-                    resource={resource}
-                    onEdit={() => onEditResource(resource)}
-                  />
-                ))}
-              </div>
-            )}
           </AccordionContent>
         </AccordionItem>
       </Accordion>

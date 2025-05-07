@@ -126,8 +126,24 @@ export default function CategoryItem({
         </div>
       </CardHeader>
       
-      <CardContent className="px-3 pt-0 pb-3 sm:px-4 sm:pb-4">
-        <div className="mb-2 flex justify-end">
+      <CardContent className="px-3 pt-0 pb-3 sm:px-4 sm:pb-4 flex flex-col h-full">
+        {resources.length === 0 ? (
+          <div className="text-center py-2 sm:py-3 px-2 sm:px-3 bg-dark/50 border border-dashed border-dark-border rounded-lg mb-3">
+            <p className="text-gray-500 text-xs">Nenhum recurso nesta categoria</p>
+          </div>
+        ) : (
+          <div className="grid gap-1 sm:gap-1.5 mb-3">
+            {resources.map((resource) => (
+              <ResourceItem 
+                key={resource.id} 
+                resource={resource}
+                onEdit={() => onEditResource(resource)}
+              />
+            ))}
+          </div>
+        )}
+        
+        <div className="flex justify-center mt-auto pt-1">
           <Button
             size="sm"
             variant="default"
@@ -138,22 +154,6 @@ export default function CategoryItem({
             <span className="whitespace-nowrap font-medium">Adicionar</span>
           </Button>
         </div>
-        
-        {resources.length === 0 ? (
-          <div className="text-center py-2 sm:py-3 px-2 sm:px-3 bg-dark/50 border border-dashed border-dark-border rounded-lg">
-            <p className="text-gray-500 text-xs">Nenhum recurso nesta categoria</p>
-          </div>
-        ) : (
-          <div className="grid gap-1 sm:gap-1.5">
-            {resources.map((resource) => (
-              <ResourceItem 
-                key={resource.id} 
-                resource={resource}
-                onEdit={() => onEditResource(resource)}
-              />
-            ))}
-          </div>
-        )}
       </CardContent>
       
       {/* Edit Category Dialog */}
