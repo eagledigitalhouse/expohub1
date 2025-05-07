@@ -151,3 +151,32 @@ export type FileDownloadContent = z.infer<typeof fileDownloadContentSchema>;
 export type LinkContent = z.infer<typeof linkContentSchema>;
 export type VideoContent = z.infer<typeof videoContentSchema>;
 export type CustomContent = z.infer<typeof customContentSchema>;
+
+// Esquema para configurações de tema (white label)
+export const themeSettings = pgTable("theme_settings", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  primaryColor: varchar("primary_color", { length: 50 }).notNull().default("#9D5CFF"), // Cor primária (botões, links, destacados)
+  backgroundColor: varchar("background_color", { length: 50 }).notNull().default("#0C0D13"), // Cor de fundo principal
+  surfaceColor: varchar("surface_color", { length: 50 }).notNull().default("#14151F"), // Cor de superfície (cards, painéis)
+  borderColor: varchar("border_color", { length: 50 }).notNull().default("#1F2231"), // Cor de bordas
+  textColor: varchar("text_color", { length: 50 }).notNull().default("#FFFFFF"), // Cor de texto principal
+  logoUrl: text("logo_url"), // URL para logotipo personalizado
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  isActive: boolean("is_active").default(false),
+});
+
+export const insertThemeSettingsSchema = createInsertSchema(themeSettings).pick({
+  name: true,
+  primaryColor: true,
+  backgroundColor: true,
+  surfaceColor: true,
+  borderColor: true,
+  textColor: true,
+  logoUrl: true,
+  isActive: true,
+});
+
+export type InsertThemeSettings = z.infer<typeof insertThemeSettingsSchema>;
+export type ThemeSettings = typeof themeSettings.$inferSelect;

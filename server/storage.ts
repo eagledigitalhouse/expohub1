@@ -6,7 +6,9 @@ import {
   Resource, 
   InsertResource, 
   ContentBlock, 
-  InsertContentBlock 
+  InsertContentBlock,
+  ThemeSettings,
+  InsertThemeSettings
 } from "@shared/schema";
 
 export interface IStorage {
@@ -37,6 +39,15 @@ export interface IStorage {
   updateContentBlock(id: number, block: Partial<InsertContentBlock>): Promise<ContentBlock | undefined>;
   deleteContentBlock(id: number): Promise<boolean>;
   reorderContentBlocks(resourceId: number, blockIds: number[]): Promise<ContentBlock[]>;
+  
+  // Theme Settings (White Label)
+  getThemeSettings(): Promise<ThemeSettings[]>;
+  getThemeSettingById(id: number): Promise<ThemeSettings | undefined>;
+  getActiveThemeSetting(): Promise<ThemeSettings | undefined>;
+  createThemeSetting(themeSetting: InsertThemeSettings): Promise<ThemeSettings>;
+  updateThemeSetting(id: number, themeSetting: Partial<InsertThemeSettings>): Promise<ThemeSettings | undefined>;
+  deleteThemeSetting(id: number): Promise<boolean>;
+  setActiveThemeSetting(id: number): Promise<ThemeSettings | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -44,22 +55,26 @@ export class MemStorage implements IStorage {
   private categories: Map<number, Category>;
   private resources: Map<number, Resource>;
   private contentBlocks: Map<number, ContentBlock>;
+  private themeSettings: Map<number, ThemeSettings>;
   
   private userId: number;
   private categoryId: number;
   private resourceId: number;
   private contentBlockId: number;
+  private themeSettingId: number;
 
   constructor() {
     this.users = new Map();
     this.categories = new Map();
     this.resources = new Map();
     this.contentBlocks = new Map();
+    this.themeSettings = new Map();
     
     this.userId = 1;
     this.categoryId = 1;
     this.resourceId = 1;
     this.contentBlockId = 1;
+    this.themeSettingId = 1;
     
     // Initialize with some sample data
     this.initSampleData();
@@ -252,7 +267,109 @@ export class MemStorage implements IStorage {
     return updatedBlocks.sort((a, b) => a.order - b.order);
   }
 
+  // Theme Settings (White Label)
+  async getThemeSettings(): Promise<ThemeSettings[]> {
+    return Array.from(this.themeSettings.values());
+  }
+
+  async getThemeSettingById(id: number): Promise<ThemeSettings | undefined> {
+    return this.themeSettings.get(id);
+  }
+
+  async getActiveThemeSetting(): Promise<ThemeSettings | undefined> {
+    return Array.from(this.themeSettings.values()).find(
+      (setting) => setting.isActive
+    );
+  }
+
+  async createThemeSetting(themeSetting: InsertThemeSettings): Promise<ThemeSettings> {
+    const id = this.themeSettingId++;
+    const now = new Date();
+    
+    const newThemeSetting: ThemeSettings = {
+      ...themeSetting,
+      id,
+      createdAt: now,
+      updatedAt: now,
+      logoUrl: themeSetting.logoUrl || null,
+    };
+    
+    // Se o novo tema for definido como ativo, desative todos os outros
+    if (newThemeSetting.isActive) {
+      await this.deactivateAllThemes();
+    }
+    
+    this.themeSettings.set(id, newThemeSetting);
+    return newThemeSetting;
+  }
+
+  async updateThemeSetting(id: number, themeSetting: Partial<InsertThemeSettings>): Promise<ThemeSettings | undefined> {
+    const existingThemeSetting = this.themeSettings.get(id);
+    if (!existingThemeSetting) return undefined;
+    
+    const wasActive = existingThemeSetting.isActive;
+    const willBeActive = themeSetting.isActive !== undefined ? themeSetting.isActive : wasActive;
+    
+    const updatedThemeSetting = {
+      ...existingThemeSetting,
+      ...themeSetting,
+      updatedAt: new Date(),
+    };
+    
+    // Se o tema está sendo definido como ativo, desative todos os outros
+    if (!wasActive && willBeActive) {
+      await this.deactivateAllThemes();
+    }
+    
+    this.themeSettings.set(id, updatedThemeSetting);
+    return updatedThemeSetting;
+  }
+
+  async deleteThemeSetting(id: number): Promise<boolean> {
+    // Não permitir excluir o tema ativo
+    const theme = this.themeSettings.get(id);
+    if (theme?.isActive) {
+      return false;
+    }
+    
+    return this.themeSettings.delete(id);
+  }
+
+  async setActiveThemeSetting(id: number): Promise<ThemeSettings | undefined> {
+    const theme = this.themeSettings.get(id);
+    if (!theme) return undefined;
+    
+    // Desativar todos os temas
+    await this.deactivateAllThemes();
+    
+    // Ativar o tema especificado
+    const updatedTheme = {
+      ...theme,
+      isActive: true,
+      updatedAt: new Date(),
+    };
+    
+    this.themeSettings.set(id, updatedTheme);
+    return updatedTheme;
+  }
+
+  private async deactivateAllThemes(): Promise<void> {
+    for (const [id, theme] of this.themeSettings.entries()) {
+      if (theme.isActive) {
+        const updatedTheme = {
+          ...theme,
+          isActive: false,
+          updatedAt: new Date(),
+        };
+        this.themeSettings.set(id, updatedTheme);
+      }
+    }
+  }
+
   private initSampleData() {
+    // Inicializa os temas padrão
+    this.initDefaultTheme();
+    
     // Sample categories
     const preEventCategory: Category = {
       id: this.categoryId++,
@@ -531,6 +648,41 @@ export class MemStorage implements IStorage {
     this.contentBlocks.set(linkBlock.id, linkBlock);
     this.contentBlocks.set(videoBlock.id, videoBlock);
     this.contentBlocks.set(customBlock.id, customBlock);
+  }
+
+  private initDefaultTheme() {
+    // Tema padrão (já ativo)
+    const defaultTheme: ThemeSettings = {
+      id: this.themeSettingId++,
+      name: "Tema Padrão",
+      primaryColor: "#9D5CFF",
+      backgroundColor: "#0C0D13",
+      surfaceColor: "#14151F",
+      borderColor: "#1F2231",
+      textColor: "#FFFFFF",
+      logoUrl: null,
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    
+    // Tema alternativo
+    const alternativeTheme: ThemeSettings = {
+      id: this.themeSettingId++,
+      name: "Tema Corporativo",
+      primaryColor: "#0073E6",
+      backgroundColor: "#0F172A",
+      surfaceColor: "#1E293B",
+      borderColor: "#334155",
+      textColor: "#F8FAFC",
+      logoUrl: null,
+      isActive: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    
+    this.themeSettings.set(defaultTheme.id, defaultTheme);
+    this.themeSettings.set(alternativeTheme.id, alternativeTheme);
   }
 }
 
