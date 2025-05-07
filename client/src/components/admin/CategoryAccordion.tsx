@@ -88,9 +88,9 @@ export default function CategoryAccordion({
   
   return (
     <>
-      <Accordion type="single" collapsible defaultValue={category.id.toString()} className="w-full">
+      <Accordion type="single" collapsible className="w-full">
         <AccordionItem value={category.id.toString()} className="border-dark-border bg-dark-surface rounded-lg overflow-hidden mb-0">
-          <AccordionTrigger className="px-4 py-3 hover:no-underline">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline group [&[data-state=open]>.toggle-icon]:bg-primary [&[data-state=open]>.toggle-icon]:text-white [&>svg]:hidden">
             <div className="flex items-center justify-between w-full">
               <div className="flex items-start">
                 <div className="h-9 w-9 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-3 mt-0.5">
@@ -104,7 +104,7 @@ export default function CategoryAccordion({
                 </div>
               </div>
               
-              <div className="flex items-center space-x-1 mr-2">
+              <div className="flex items-center space-x-2">
                 <Button
                   size="icon"
                   variant="ghost"
@@ -123,6 +123,9 @@ export default function CategoryAccordion({
                 >
                   <Trash className="h-3.5 w-3.5" />
                 </Button>
+                <div className="toggle-icon h-7 w-7 rounded-full bg-primary/20 flex items-center justify-center text-primary transition-colors">
+                  <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                </div>
               </div>
             </div>
           </AccordionTrigger>
