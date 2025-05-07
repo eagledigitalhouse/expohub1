@@ -267,8 +267,8 @@ export default function ThemeSettingsPanel() {
   };
 
   const handleEdit = (theme: ThemeSettings) => {
-    setCurrentTheme(theme);
-    setFormData({
+    // Criar uma versão compatível com ThemeFormData
+    const themeFormData: ThemeFormData = {
       id: theme.id,
       name: theme.name,
       primaryColor: theme.primaryColor,
@@ -276,8 +276,10 @@ export default function ThemeSettingsPanel() {
       surfaceColor: theme.surfaceColor,
       borderColor: theme.borderColor,
       textColor: theme.textColor,
-      isActive: Boolean(theme.isActive),
-    });
+      isActive: Boolean(theme.isActive)
+    };
+    setCurrentTheme(themeFormData);
+    setFormData(themeFormData);
     setIsCreateDialogOpen(true);
   };
 
