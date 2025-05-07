@@ -9,7 +9,8 @@ interface ResourceItemProps {
 }
 
 export default function ResourceItem({ resource, onEdit }: ResourceItemProps) {
-  const ResourceIcon = getIconByName(resource.icon as any || "FileText");
+  // Use o ícone FileText como padrão para todos os recursos, já que não temos campo icon no recurso
+  const ResourceIcon = getIconByName("FileText");
   
   return (
     <div className="bg-background/95 border border-gray-800 hover:border-gray-700 rounded-md p-3 transition-all hover:shadow relative group">

@@ -26,7 +26,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 export default function Admin() {
   const [, navigate] = useLocation();
   const [activePage, setActivePage] = useState("resources");
-  const [viewMode, setViewMode] = useState<"cards" | "accordion" | "table" | "draggable">("cards");
+  const [viewMode, setViewMode] = useState<"accordion" | "table" | "draggable">("draggable");
   const [showNewCategoryForm, setShowNewCategoryForm] = useState(false);
   const [editingResource, setEditingResource] = useState<Resource | null>(null);
   const [showResourceEditor, setShowResourceEditor] = useState(false);
@@ -154,22 +154,7 @@ export default function Admin() {
               <div>
                 {categories?.length > 0 ? (
                   <>
-                    {/* Card View */}
-                    {viewMode === "cards" && (
-                      <CategoryList
-                        categories={categories}
-                        getResourcesByCategory={getResourcesByCategory}
-                        onEditResource={handleEditResource}
-                        onAddResource={handleAddResource}
-                        onReorderCategories={(reorderedCategories) => {
-                          // A implementação real iria persistir a ordem no backend
-                          toast({
-                            title: "Categorias reordenadas",
-                            description: "A ordem das categorias foi atualizada.",
-                          });
-                        }}
-                      />
-                    )}
+
                     
                     {/* Accordion View */}
                     {viewMode === "accordion" && (
