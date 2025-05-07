@@ -13,7 +13,7 @@ export default function ResourceItem({ resource, onEdit }: ResourceItemProps) {
   const ResourceIcon = getIconByName("FileText");
   
   return (
-    <div className="bg-background/95 border border-gray-800 hover:border-gray-700 rounded-md p-3 transition-all hover:shadow relative group">
+    <div className="bg-background/95 border border-gray-800 hover:border-gray-700 rounded-md p-3 transition-all hover:shadow relative group touch-manipulation">
       <div className="flex items-center gap-3">
         <div className="flex-shrink-0 h-8 w-8 rounded bg-primary/10 flex items-center justify-center text-primary">
           <ResourceIcon className="h-4 w-4" />
@@ -32,7 +32,7 @@ export default function ResourceItem({ resource, onEdit }: ResourceItemProps) {
           className="h-7 w-7 text-gray-400 hover:text-primary hover:bg-primary/5 flex-shrink-0"
           onClick={(e) => {
             e.stopPropagation();
-            onEdit();
+            onEdit(e);
           }}
         >
           <Settings className="h-3.5 w-3.5" />

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Category, Resource } from "@shared/schema";
-import { 
-  DndContext, 
+import {
+  DndContext,
   closestCenter,
   MouseSensor,
   TouchSensor,
@@ -12,8 +12,7 @@ import {
   DragOverlay,
   useSensor,
   useSensors,
-  DraggableAttributes,
-  Active
+  pointerWithin,
 } from "@dnd-kit/core";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { useToast } from "@/hooks/use-toast";
@@ -22,8 +21,6 @@ import { apiRequest } from "@/lib/queryClient";
 import ResourceItem from "./ResourceItem";
 import { getIconByName } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Draggable } from "./Draggable";
-import { Droppable } from "./Droppable";
 
 interface TrelloBoardProps {
   categories: Category[];
@@ -177,7 +174,7 @@ export default function TrelloBoard({
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCenter}
+      collisionDetection={pointerWithin}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
@@ -193,8 +190,8 @@ export default function TrelloBoard({
             <div 
               key={category.id}
               id={category.id.toString()}
-              className={`flex flex-col flex-shrink-0 bg-dark-surface border border-dark-border rounded-lg w-[320px] shadow-md transition-all ${
-                isOver ? 'ring-2 ring-primary shadow-lg shadow-primary/20 border-primary/30' : ''
+              className={`flex flex-col flex-shrink-0 bg-dark-surface border border-dark-border rounded-lg w-[320px] shadow-md transition-all duration-200 ${
+                isOver ? 'ring-2 ring-primary shadow-lg shadow-primary/20 border-primary/30 bg-primary/5' : ''
               }`}
             >
               {/* Cabeçalho */}
@@ -226,16 +223,16 @@ export default function TrelloBoard({
               {/* Recursos */}
               <div className="flex-grow p-2 space-y-2 overflow-y-auto max-h-[60vh]">
                 {resources.length === 0 ? (
-                  <div className="flex items-center justify-center h-20 border border-dashed border-dark-border rounded-md">
-                    <p className="text-sm text-gray-400">Nenhum recurso</p>
+                  <div className="flex items-center justify-center h-32 border border-dashed border-dark-border rounded-md">
+                    <p className="text-sm text-gray-400">Solte recursos aqui</p>
                   </div>
                 ) : (
-                  <div>
+                  <div className="min-h-[50px] py-1">
                     {resources.map((resource) => (
                       <div
                         key={resource.id}
                         id={`resource-${resource.id}`}
-                        className="mb-2 cursor-grab active:cursor-grabbing touch-manipulation"
+                        className="mb-3 cursor-grab active:cursor-grabbing touch-manipulation"
                         data-resource-id={resource.id}
                         data-category-id={category.id}
                       >
@@ -276,7 +273,7 @@ export default function TrelloBoard({
         easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
       }}>
         {activeId && activeResource && activeId.startsWith('resource-') && (
-          <div className="w-[300px] shadow-xl">
+          <div className="w-[300px] shadow-xl rotate-1 opacity-90">
             <ResourceItem 
               resource={activeResource}
               onEdit={() => {}}
