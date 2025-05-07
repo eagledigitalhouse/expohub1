@@ -11,8 +11,8 @@ import Navbar from "@/components/Navbar";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import CategoryItem from "@/components/admin/CategoryItem";
 import CategoryForm from "@/components/admin/CategoryForm";
-import ResourceEditor from "@/components/admin/ResourceEditor";
-import ResourceDrawer from "@/components/ResourceDrawer";
+import ResourceSidePanel from "@/components/admin/ResourceSidePanel";
+import ResourceModal from "@/components/ResourceModal";
 import { Button } from "@/components/ui/button";
 
 export default function Admin() {
@@ -190,7 +190,7 @@ export default function Admin() {
       )}
       
       {showResourceEditor && (
-        <ResourceEditor 
+        <ResourceSidePanel 
           isOpen={showResourceEditor}
           onClose={handleCloseResourceEditor}
           editingResource={editingResource}
@@ -200,7 +200,7 @@ export default function Admin() {
       )}
       
       {/* Resource Preview */}
-      <ResourceDrawer 
+      <ResourceModal 
         isOpen={showResourcePreview} 
         onClose={handleClosePreview}
         currentResource={previewData}
