@@ -330,7 +330,10 @@ export default function TrelloBoard({
               <div className="p-3 border-b border-dark-border flex items-center justify-between">
                 <div className="flex items-center">
                   <div className="h-9 w-9 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-3">
-                    {getIconByName(activeCategory.icon as any || "Package")({ className: "h-5 w-5" })}
+                    {(() => {
+                      const CategoryIcon = getIconByName(activeCategory.icon as any || "Package");
+                      return <CategoryIcon className="h-5 w-5" />;
+                    })()}
                   </div>
                   <h3 className="font-medium text-white truncate max-w-[150px]">{activeCategory.name}</h3>
                 </div>
