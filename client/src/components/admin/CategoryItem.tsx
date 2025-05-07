@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Category, Resource } from "@shared/schema";
-import { Edit, Trash, Plus, ChevronDown, ChevronUp } from "lucide-react";
+import { Edit, Trash, Plus, FileText } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { getIconByName } from "@/lib/utils";
 import ResourceItem from "./ResourceItem";
@@ -17,6 +17,15 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
+import { 
+  Card, 
+  CardHeader, 
+  CardTitle, 
+  CardContent, 
+  CardFooter 
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface CategoryItemProps {
   category: Category;
@@ -31,7 +40,6 @@ export default function CategoryItem({
   onEditResource,
   onAddResource
 }: CategoryItemProps) {
-  const [isExpanded, setIsExpanded] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   
@@ -61,17 +69,11 @@ export default function CategoryItem({
     },
   });
   
-  const handleToggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-  
-  const handleEditClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleEditClick = () => {
     setIsEditing(true);
   };
   
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleDeleteClick = () => {
     setShowDeleteDialog(true);
   };
   
@@ -79,74 +81,84 @@ export default function CategoryItem({
     deleteCategoryMutation.mutate();
   };
   
-  const handleAddResourceClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleAddResourceClick = () => {
     onAddResource(category.id);
   };
   
   return (
-    <div className="bg-dark-surface border border-dark-border rounded-lg overflow-hidden">
-      <div 
-        className="flex justify-between items-center p-4 border-b border-dark-border cursor-pointer"
-        onClick={handleToggleExpand}
-      >
-        <div className="flex items-center">
-          <CategoryIcon className="h-5 w-5 mr-2 text-primary" />
-          <h2 className="text-lg font-medium text-white">{category.name}</h2>
-        </div>
-        <div className="flex items-center">
-          <button 
-            className="p-2 text-gray-400 hover:text-white rounded-md transition-colors"
-            onClick={handleEditClick}
-          >
-            <Edit className="h-5 w-5" />
-          </button>
-          <button 
-            className="p-2 text-gray-400 hover:text-red-500 rounded-md transition-colors"
-            onClick={handleDeleteClick}
-          >
-            <Trash className="h-5 w-5" />
-          </button>
-          <button className="p-2 text-gray-400 ml-2">
-            {isExpanded ? (
-              <ChevronUp className="h-5 w-5" />
-            ) : (
-              <ChevronDown className="h-5 w-5" />
-            )}
-          </button>
-        </div>
-      </div>
-      
-      {isExpanded && (
-        <div className="p-4">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-sm font-medium text-gray-400">Recursos nesta categoria</h3>
-            <button 
-              className="text-sm text-primary hover:text-primary-light flex items-center"
-              onClick={handleAddResourceClick}
-            >
-              <Plus className="h-4 w-4 mr-1" />
-              Adicionar Recurso
-            </button>
+    <Card className="bg-dark-surface border-dark-border">
+      <CardHeader className="pb-3">
+        <div className="flex justify-between items-start">
+          <div className="flex items-center">
+            <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-3">
+              <CategoryIcon className="h-5 w-5" />
+            </div>
+            <div>
+              <CardTitle className="text-xl text-white">{category.name}</CardTitle>
+              <div className="flex items-center mt-1">
+                <Badge variant="outline" className="bg-dark/80 border-primary/30 text-primary/80">
+                  {resources.length} {resources.length === 1 ? 'recurso' : 'recursos'}
+                </Badge>
+              </div>
+            </div>
           </div>
           
-          <div className="space-y-3">
-            {resources.length === 0 ? (
-              <div className="text-center py-4 text-gray-500">
-                Nenhum recurso nesta categoria.
-              </div>
-            ) : (
-              resources.map((resource) => (
-                <ResourceItem 
-                  key={resource.id} 
-                  resource={resource}
-                  onEdit={() => onEditResource(resource)}
-                />
-              ))
-            )}
+          <div className="flex space-x-2">
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-9 border-dark-border hover:border-primary hover:bg-dark flex items-center"
+              onClick={handleEditClick}
+            >
+              <Edit className="h-4 w-4 mr-1.5" />
+              Editar
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-9 border-dark-border hover:border-destructive hover:text-destructive flex items-center"
+              onClick={handleDeleteClick}
+            >
+              <Trash className="h-4 w-4 mr-1.5" />
+              Excluir
+            </Button>
           </div>
         </div>
-      )}
+      </CardHeader>
+      
+      <CardContent className="pb-3">
+        <div className="mb-3 flex justify-between items-center">
+          <div className="flex items-center">
+            <FileText className="h-4 w-4 text-gray-400 mr-2" />
+            <h3 className="text-sm font-medium text-gray-400">Recursos</h3>
+          </div>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-8 text-primary hover:text-primary-light hover:bg-primary/5 flex items-center px-2.5"
+            onClick={handleAddResourceClick}
+          >
+            <Plus className="h-4 w-4 mr-1.5" />
+            Adicionar
+          </Button>
+        </div>
+        
+        {resources.length === 0 ? (
+          <div className="text-center py-5 px-4 bg-dark/50 border border-dashed border-dark-border rounded-lg">
+            <p className="text-gray-500 text-sm">Nenhum recurso nesta categoria</p>
+          </div>
+        ) : (
+          <div className="grid gap-2">
+            {resources.map((resource) => (
+              <ResourceItem 
+                key={resource.id} 
+                resource={resource}
+                onEdit={() => onEditResource(resource)}
+              />
+            ))}
+          </div>
+        )}
+      </CardContent>
       
       {/* Edit Category Dialog */}
       {isEditing && (
@@ -176,6 +188,6 @@ export default function CategoryItem({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </Card>
   );
 }

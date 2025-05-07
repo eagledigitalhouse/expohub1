@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Resource } from "@shared/schema";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Trash, Clock } from "lucide-react";
 import { formatDisplayDate, getIconByName } from "@/lib/utils";
 import { apiRequest } from "@/lib/queryClient";
 import {
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 
 interface ResourceItemProps {
   resource: Resource;
@@ -72,13 +73,11 @@ export default function ResourceItem({ resource, onEdit }: ResourceItemProps) {
     },
   });
   
-  const handleEditClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleEditClick = () => {
     onEdit();
   };
   
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleDeleteClick = () => {
     setShowDeleteDialog(true);
   };
   
@@ -88,29 +87,42 @@ export default function ResourceItem({ resource, onEdit }: ResourceItemProps) {
   
   return (
     <>
-      <div className="bg-dark border border-dark-border rounded-md p-3 flex justify-between items-center">
+      <div className="bg-dark border border-dark-border hover:border-primary/30 rounded-md p-3.5 flex justify-between items-center group">
         <div className="flex items-center">
-          <span className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <div className="h-9 w-9 rounded-md bg-primary/10 flex items-center justify-center text-primary">
             <ResourceIcon className="h-4 w-4" />
-          </span>
+          </div>
           <div className="ml-3">
-            <h4 className="text-white">{resource.title}</h4>
-            <p className="text-xs text-gray-400">Última atualização: {date}</p>
+            <h4 className="text-white font-medium">{resource.title}</h4>
+            <div className="flex items-center text-xs text-gray-400 mt-1">
+              <Clock className="h-3 w-3 mr-1" />
+              <span>{date}</span>
+              {resource.readTime && (
+                <>
+                  <span className="mx-1.5">•</span>
+                  <span>{resource.readTime} min</span>
+                </>
+              )}
+            </div>
           </div>
         </div>
-        <div className="flex items-center">
-          <button 
-            className="p-1.5 text-gray-400 hover:text-white rounded-md transition-colors"
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-8 text-gray-400 hover:text-primary hover:bg-primary/5 px-2 opacity-0 group-hover:opacity-100 transition-opacity"
             onClick={handleEditClick}
           >
-            <Edit className="h-4 w-4" />
-          </button>
-          <button 
-            className="p-1.5 text-gray-400 hover:text-red-500 rounded-md transition-colors"
+            <Edit className="h-3.5 w-3.5" />
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-8 text-gray-400 hover:text-destructive hover:bg-destructive/5 px-2 opacity-0 group-hover:opacity-100 transition-opacity"
             onClick={handleDeleteClick}
           >
-            <Trash className="h-4 w-4" />
-          </button>
+            <Trash className="h-3.5 w-3.5" />
+          </Button>
         </div>
       </div>
       
