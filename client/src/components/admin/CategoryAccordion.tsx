@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Category, Resource } from "@shared/schema";
-import { Edit, Trash, Plus, ChevronDown, ChevronUp, FileText } from "lucide-react";
+import { Settings, Plus, ChevronDown, ChevronUp, FileText } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { getIconByName } from "@/lib/utils";
 import ResourceItem from "./ResourceItem";
@@ -110,18 +110,9 @@ export default function CategoryAccordion({
                   variant="ghost"
                   className="h-7 w-7 text-gray-400 hover:text-primary hover:bg-primary/5"
                   onClick={handleEditClick}
-                  title="Editar categoria"
+                  title="Configurações da categoria"
                 >
-                  <Edit className="h-3.5 w-3.5" />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-7 w-7 text-gray-400 hover:text-destructive hover:bg-destructive/5"
-                  onClick={handleDeleteClick}
-                  title="Excluir categoria"
-                >
-                  <Trash className="h-3.5 w-3.5" />
+                  <Settings className="h-3.5 w-3.5" />
                 </Button>
                 <div className="toggle-icon h-7 w-7 rounded-full bg-primary/20 flex items-center justify-center text-primary transition-colors">
                   <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />

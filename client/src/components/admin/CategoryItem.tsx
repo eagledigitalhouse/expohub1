@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Category, Resource } from "@shared/schema";
-import { Edit, Trash, Plus, FileText } from "lucide-react";
+import { Settings, Plus, FileText } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { getIconByName } from "@/lib/utils";
 import ResourceItem from "./ResourceItem";
@@ -109,18 +109,9 @@ export default function CategoryItem({
               variant="ghost"
               className="h-6 w-6 sm:h-7 sm:w-7 text-gray-400 hover:text-primary hover:bg-primary/5"
               onClick={handleEditClick}
-              title="Editar categoria"
+              title="Configurações da categoria"
             >
-              <Edit className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-            </Button>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="h-6 w-6 sm:h-7 sm:w-7 text-gray-400 hover:text-destructive hover:bg-destructive/5"
-              onClick={handleDeleteClick}
-              title="Excluir categoria"
-            >
-              <Trash className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+              <Settings className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
             </Button>
           </div>
         </div>
