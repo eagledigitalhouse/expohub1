@@ -5,6 +5,7 @@ import { Settings, Plus, FileText } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { getIconByName } from "@/lib/utils";
 import ResourceItem from "./ResourceItem";
+import DraggableItem from "./DraggableItem";
 import CategoryForm from "./CategoryForm";
 import {
   AlertDialog,
@@ -126,17 +127,12 @@ export default function CategoryItem({
         ) : (
           <div className="grid gap-2">
             {resources.map((resource) => (
-              <div 
-                key={resource.id} 
-                id={`resource-${resource.id}`} 
-                data-category-id={category.id} 
-                className="resource-item group hover:cursor-grab active:cursor-grabbing"
-              >
-                <ResourceItem 
-                  resource={resource}
-                  onEdit={() => onEditResource(resource)}
-                />
-              </div>
+              <DraggableItem
+                key={resource.id}
+                resource={resource}
+                categoryId={category.id}
+                onEdit={() => onEditResource(resource)}
+              />
             ))}
           </div>
         )}
