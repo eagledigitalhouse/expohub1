@@ -117,35 +117,48 @@ export default function CategoryItem({
         </div>
       </CardHeader>
       
-      <CardContent className="px-3 pt-0 pb-3 sm:px-4 sm:pb-4 flex flex-col h-full">
+      <CardContent className="px-3 pt-0 pb-3 sm:px-4 sm:pb-2 flex-grow">
         {resources.length === 0 ? (
-          <div className="text-center py-2 sm:py-3 px-2 sm:px-3 bg-dark/50 border border-dashed border-dark-border rounded-lg mb-3">
+          <div className="text-center py-2 sm:py-3 px-2 sm:px-3 bg-dark/50 border border-dashed border-dark-border rounded-lg mb-2">
             <p className="text-gray-500 text-xs">Nenhum recurso nesta categoria</p>
           </div>
         ) : (
-          <div className="grid gap-1 sm:gap-1.5 mb-3">
+          <div className="grid gap-1 sm:gap-1.5">
             {resources.map((resource) => (
-              <ResourceItem 
+              <div 
                 key={resource.id} 
-                resource={resource}
-                onEdit={() => onEditResource(resource)}
-              />
+                id={`resource-${resource.id}`} 
+                data-category-id={category.id} 
+                className="resource-item group hover:cursor-grab active:cursor-grabbing"
+              >
+                <div className="relative">
+                  <div className="absolute left-0 top-0 bottom-0 w-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="w-1 h-5 bg-gray-500/30 rounded-full"></div>
+                  </div>
+                  <div className="pl-6">
+                    <ResourceItem 
+                      resource={resource}
+                      onEdit={() => onEditResource(resource)}
+                    />
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         )}
       </CardContent>
       
-      <CardFooter className="flex justify-center p-3 pt-0 sm:p-4 sm:pt-0">
+      <div className="px-3 pb-3 sm:px-4 sm:pb-4 mt-auto">
         <Button
           size="sm"
           variant="default"
-          className="h-7 bg-primary text-white hover:bg-primary/90 flex items-center px-3.5 text-xs rounded-md"
+          className="h-8 w-full bg-primary text-white hover:bg-primary/90 flex items-center justify-center px-3.5 text-xs rounded-md"
           onClick={handleAddResourceClick}
         >
           <Plus className="h-3.5 w-3.5 mr-2" />
           <span className="whitespace-nowrap font-medium">Adicionar</span>
         </Button>
-      </CardFooter>
+      </div>
       
       {/* Edit Category Dialog */}
       {isEditing && (
