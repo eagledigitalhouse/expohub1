@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import { Category, Resource } from "@shared/schema";
 import { 
   DndContext, 
@@ -8,66 +7,49 @@ import {
   PointerSensor, 
   useSensor, 
   useSensors,
-  DragEndEvent
+  DragEndEvent,
+  DragStartEvent
 } from "@dnd-kit/core";
 import { 
   arrayMove, 
   SortableContext, 
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
+  horizontalListSortingStrategy,
   useSortable
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { restrictToParentElement } from "@dnd-kit/modifiers";
+import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
 import CategoryItem from "./CategoryItem";
-import { useToast } from "@/hooks/use-toast";
-import { GripVertical } from "lucide-react";
 
-interface SortableCategoryItemProps {
+interface SortableCategoryProps {
   category: Category;
   resources: Resource[];
   onEditResource: (resource: Resource) => void;
   onAddResource: (categoryId: number) => void;
 }
 
-function SortableCategoryItem({
-  category,
-  resources,
-  onEditResource,
-  onAddResource
-}: SortableCategoryItemProps) {
+function SortableCategory({ category, resources, onEditResource, onAddResource }: SortableCategoryProps) {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
     transition,
-    isDragging
-  } = useSortable({ id: category.id.toString() });
+  } = useSortable({ id: category.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    zIndex: isDragging ? 10 : 1,
-    opacity: isDragging ? 0.8 : 1,
-    position: 'relative' as 'relative'
   };
 
   return (
-    <div ref={setNodeRef} style={style} className="mb-3 relative group">
+    <div ref={setNodeRef} style={style} className="group relative" {...attributes} {...listeners}>
       <CategoryItem
         category={category}
         resources={resources}
         onEditResource={onEditResource}
         onAddResource={onAddResource}
       />
-      <div 
-        className="absolute left-0 top-0 bottom-0 w-8 flex items-center justify-center cursor-grab opacity-0 group-hover:opacity-70 transition-opacity"
-        {...attributes}
-        {...listeners}
-      >
-        <GripVertical className="w-4 h-4 text-gray-400" />
-      </div>
     </div>
   );
 }
@@ -80,21 +62,25 @@ interface CategoryListProps {
   onReorderCategories?: (categories: Category[]) => void;
 }
 
-export default function CategoryList({
+export default function CategoryList({ 
   categories,
   getResourcesByCategory,
   onEditResource,
   onAddResource,
   onReorderCategories
 }: CategoryListProps) {
-  const [items, setItems] = useState(categories);
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
+  const [items, setItems] = useState<Category[]>(categories);
 
+  // Atualizar items quando as categorias mudam
+  useEffect(() => {
+    setItems(categories);
+  }, [categories]);
+
+  // Sensors para detectar eventos de drag
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8,
+        distance: 5,
       },
     }),
     useSensor(KeyboardSensor, {
@@ -107,17 +93,17 @@ export default function CategoryList({
     
     if (over && active.id !== over.id) {
       setItems((items) => {
-        const oldIndex = items.findIndex(item => item.id.toString() === active.id);
-        const newIndex = items.findIndex(item => item.id.toString() === over.id);
+        const oldIndex = items.findIndex(item => item.id === active.id);
+        const newIndex = items.findIndex(item => item.id === over.id);
         
-        const newItems = arrayMove(items, oldIndex, newIndex);
+        const reorderedItems = arrayMove(items, oldIndex, newIndex);
         
-        // Opcional: Atualizar no backend
+        // Opcional: Persistir a ordem no backend
         if (onReorderCategories) {
-          onReorderCategories(newItems);
+          onReorderCategories(reorderedItems);
         }
         
-        return newItems;
+        return reorderedItems;
       });
     }
   };
@@ -127,15 +113,15 @@ export default function CategoryList({
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
-      modifiers={[restrictToParentElement]}
+      modifiers={[restrictToHorizontalAxis]}
     >
       <SortableContext 
-        items={items.map(item => item.id.toString())}
-        strategy={verticalListSortingStrategy}
+        items={items.map(item => item.id)}
+        strategy={horizontalListSortingStrategy}
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
           {items.map((category) => (
-            <SortableCategoryItem
+            <SortableCategory
               key={category.id}
               category={category}
               resources={getResourcesByCategory(category.id)}

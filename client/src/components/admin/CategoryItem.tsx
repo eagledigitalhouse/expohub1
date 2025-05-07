@@ -133,19 +133,19 @@ export default function CategoryItem({
             ))}
           </div>
         )}
-        
-        <div className="flex justify-center mt-auto pt-1">
-          <Button
-            size="sm"
-            variant="default"
-            className="h-7 bg-primary text-white hover:bg-primary/90 flex items-center px-3.5 text-xs rounded-md"
-            onClick={handleAddResourceClick}
-          >
-            <Plus className="h-3.5 w-3.5 mr-2" />
-            <span className="whitespace-nowrap font-medium">Adicionar</span>
-          </Button>
-        </div>
       </CardContent>
+      
+      <CardFooter className="flex justify-center p-3 pt-0 sm:p-4 sm:pt-0">
+        <Button
+          size="sm"
+          variant="default"
+          className="h-7 bg-primary text-white hover:bg-primary/90 flex items-center px-3.5 text-xs rounded-md"
+          onClick={handleAddResourceClick}
+        >
+          <Plus className="h-3.5 w-3.5 mr-2" />
+          <span className="whitespace-nowrap font-medium">Adicionar</span>
+        </Button>
+      </CardFooter>
       
       {/* Edit Category Dialog */}
       {isEditing && (

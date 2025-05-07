@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Resource, Category, insertResourceSchema } from "@shared/schema";
-import { Plus, List, Grid, Table as TableIcon } from "lucide-react";
+import { Plus, List, Grid, Table as TableIcon, MoveHorizontal } from "lucide-react";
 import { useLocation } from "wouter";
 import { z } from "zod";
 import { apiRequest } from "@/lib/queryClient";
@@ -18,6 +18,7 @@ import ResourceModal from "@/components/ResourceModal";
 import ViewToggle from "@/components/admin/ViewToggle";
 import CategoryList from "@/components/admin/CategoryList";
 import SortableResourceList from "@/components/admin/SortableResourceList";
+import DraggableResourceList from "@/components/admin/DraggableResourceList";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 
