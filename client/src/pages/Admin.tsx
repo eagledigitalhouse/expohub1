@@ -16,6 +16,8 @@ import CategoryForm from "@/components/admin/CategoryForm";
 import ResourceSidePanel from "@/components/admin/ResourceSidePanel";
 import ResourceModal from "@/components/ResourceModal";
 import ViewToggle from "@/components/admin/ViewToggle";
+import CategoryList from "@/components/admin/CategoryList";
+import SortableResourceList from "@/components/admin/SortableResourceList";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -152,17 +154,19 @@ export default function Admin() {
                   <>
                     {/* Card View */}
                     {viewMode === "cards" && (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-                        {categories.map((category: Category) => (
-                          <CategoryItem
-                            key={category.id}
-                            category={category}
-                            resources={getResourcesByCategory(category.id)}
-                            onEditResource={handleEditResource}
-                            onAddResource={handleAddResource}
-                          />
-                        ))}
-                      </div>
+                      <CategoryList
+                        categories={categories}
+                        getResourcesByCategory={getResourcesByCategory}
+                        onEditResource={handleEditResource}
+                        onAddResource={handleAddResource}
+                        onReorderCategories={(reorderedCategories) => {
+                          // A implementação real iria persistir a ordem no backend
+                          toast({
+                            title: "Categorias reordenadas",
+                            description: "A ordem das categorias foi atualizada.",
+                          });
+                        }}
+                      />
                     )}
                     
                     {/* Accordion View */}

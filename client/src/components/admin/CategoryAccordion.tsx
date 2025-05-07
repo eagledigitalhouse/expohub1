@@ -5,6 +5,7 @@ import { Settings, Plus, ChevronDown, ChevronUp, FileText } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { getIconByName } from "@/lib/utils";
 import ResourceItem from "./ResourceItem";
+import SortableResourceList from "./SortableResourceList";
 import CategoryForm from "./CategoryForm";
 import {
   AlertDialog,
@@ -126,14 +127,14 @@ export default function CategoryAccordion({
                 <p className="text-gray-500 text-xs">Nenhum recurso nesta categoria</p>
               </div>
             ) : (
-              <div className="grid gap-1.5 mb-3">
-                {resources.map((resource) => (
-                  <ResourceItem 
-                    key={resource.id} 
-                    resource={resource}
-                    onEdit={() => onEditResource(resource)}
-                  />
-                ))}
+              <div className="mb-3">
+                <SortableResourceList
+                  resources={resources}
+                  onEditResource={onEditResource}
+                  onReorderResources={(reorderedResources) => {
+                    // Implementação real iria salvar a ordem no backend
+                  }}
+                />
               </div>
             )}
             
