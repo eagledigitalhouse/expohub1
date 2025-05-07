@@ -87,17 +87,17 @@ export default function CategoryItem({
   
   return (
     <Card className="bg-dark-surface border-dark-border h-full overflow-hidden">
-      <CardHeader className="p-4 pb-3">
+      <CardHeader className="p-3 pb-2.5 sm:p-4 sm:pb-3">
         <div className="flex justify-between items-start">
-          <div className="flex items-center">
-            <div className="h-9 w-9 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-3 flex-shrink-0">
-              <CategoryIcon className="h-5 w-5" />
+          <div className="flex items-center min-w-0 pr-2">
+            <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-2 sm:mr-3 flex-shrink-0">
+              <CategoryIcon className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
-            <div>
-              <CardTitle className="text-lg text-white truncate" title={category.name}>
+            <div className="min-w-0">
+              <CardTitle className="text-base sm:text-lg text-white truncate" title={category.name}>
                 {category.name}
               </CardTitle>
-              <div className="flex items-center mt-1">
+              <div className="flex items-center mt-0.5 sm:mt-1">
                 <Badge variant="outline" className="text-xs py-0 h-5 bg-dark/80 border-primary/30 text-primary/80">
                   {resources.length} {resources.length === 1 ? 'recurso' : 'recursos'}
                 </Badge>
@@ -105,52 +105,52 @@ export default function CategoryItem({
             </div>
           </div>
           
-          <div className="flex space-x-1 ml-2">
+          <div className="flex space-x-1 flex-shrink-0">
             <Button
               size="icon"
               variant="ghost"
-              className="h-7 w-7 text-gray-400 hover:text-primary hover:bg-primary/5"
+              className="h-6 w-6 sm:h-7 sm:w-7 text-gray-400 hover:text-primary hover:bg-primary/5"
               onClick={handleEditClick}
               title="Editar categoria"
             >
-              <Edit className="h-3.5 w-3.5" />
+              <Edit className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
             </Button>
             <Button
               size="icon"
               variant="ghost"
-              className="h-7 w-7 text-gray-400 hover:text-destructive hover:bg-destructive/5"
+              className="h-6 w-6 sm:h-7 sm:w-7 text-gray-400 hover:text-destructive hover:bg-destructive/5"
               onClick={handleDeleteClick}
               title="Excluir categoria"
             >
-              <Trash className="h-3.5 w-3.5" />
+              <Trash className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
             </Button>
           </div>
         </div>
       </CardHeader>
       
-      <CardContent className="px-4 pt-0 pb-4">
+      <CardContent className="px-3 pt-0 pb-3 sm:px-4 sm:pb-4">
         <div className="mb-2 flex justify-between items-center">
           <div className="flex items-center">
-            <FileText className="h-3.5 w-3.5 text-gray-400 mr-1.5" />
+            <FileText className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-gray-400 mr-1 sm:mr-1.5" />
             <h3 className="text-xs font-medium text-gray-400">Recursos</h3>
           </div>
           <Button
             size="sm"
             variant="ghost"
-            className="h-7 text-primary hover:text-primary-light hover:bg-primary/5 flex items-center px-2 text-xs"
+            className="h-6 sm:h-7 text-primary hover:text-primary-light hover:bg-primary/5 flex items-center px-1.5 sm:px-2 text-xs"
             onClick={handleAddResourceClick}
           >
-            <Plus className="h-3.5 w-3.5 mr-1" />
-            Adicionar
+            <Plus className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1" />
+            <span className="whitespace-nowrap">Adicionar</span>
           </Button>
         </div>
         
         {resources.length === 0 ? (
-          <div className="text-center py-3 px-3 bg-dark/50 border border-dashed border-dark-border rounded-lg">
+          <div className="text-center py-2 sm:py-3 px-2 sm:px-3 bg-dark/50 border border-dashed border-dark-border rounded-lg">
             <p className="text-gray-500 text-xs">Nenhum recurso nesta categoria</p>
           </div>
         ) : (
-          <div className="grid gap-1.5">
+          <div className="grid gap-1 sm:gap-1.5">
             {resources.map((resource) => (
               <ResourceItem 
                 key={resource.id} 

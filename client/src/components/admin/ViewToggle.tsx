@@ -18,28 +18,28 @@ export default function ViewToggle({ activeView, onViewChange }: ViewToggleProps
       onValueChange={(value) => {
         if (value) onViewChange(value as "cards" | "accordion" | "table");
       }}
-      className="border border-dark-border rounded-md bg-dark/50"
+      className="border border-dark-border rounded-md bg-dark/50 h-9"
     >
       <ToggleGroupItem 
         value="cards" 
-        className="data-[state=on]:bg-primary/10 data-[state=on]:text-primary" 
+        className="h-8 w-8 sm:h-8 sm:w-8 data-[state=on]:bg-primary/10 data-[state=on]:text-primary" 
         title="Visualizar como cards"
       >
-        <Grid className="h-4 w-4" />
+        <Grid className="h-3.5 w-3.5" />
       </ToggleGroupItem>
       <ToggleGroupItem 
         value="accordion" 
-        className="data-[state=on]:bg-primary/10 data-[state=on]:text-primary"
+        className="h-8 w-8 sm:h-8 sm:w-8 data-[state=on]:bg-primary/10 data-[state=on]:text-primary"
         title="Visualizar como acordeão"
       >
-        <List className="h-4 w-4" />
+        <List className="h-3.5 w-3.5" />
       </ToggleGroupItem>
       <ToggleGroupItem 
         value="table" 
-        className="data-[state=on]:bg-primary/10 data-[state=on]:text-primary"
+        className="h-8 w-8 sm:h-8 sm:w-8 data-[state=on]:bg-primary/10 data-[state=on]:text-primary"
         title="Visualizar como tabela"
       >
-        <Table className="h-4 w-4" />
+        <Table className="h-3.5 w-3.5" />
       </ToggleGroupItem>
     </ToggleGroup>
   );

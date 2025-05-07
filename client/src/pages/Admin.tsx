@@ -129,19 +129,20 @@ export default function Admin() {
         <div className="flex-1 flex flex-col min-h-screen overflow-hidden">
           {activePage === "resources" && (
             <div className="py-6 px-4 sm:px-6 lg:px-8 flex-1">
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
-                <h1 className="text-2xl font-bold text-white">Gerenciar Recursos</h1>
-                <div className="flex flex-row items-center gap-3">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6">
+                <h1 className="text-xl md:text-2xl font-bold text-white">Gerenciar Recursos</h1>
+                <div className="flex flex-row items-center flex-wrap gap-2">
                   <ViewToggle
                     activeView={viewMode}
                     onViewChange={setViewMode}
                   />
                   <Button 
                     onClick={handleAddCategory}
-                    className="bg-primary hover:bg-primary/90 text-white"
+                    className="bg-primary hover:bg-primary/90 text-white h-9"
+                    size="sm"
                   >
-                    <Plus className="mr-2 h-5 w-5" />
-                    Nova Categoria
+                    <Plus className="mr-1.5 h-4 w-4" />
+                    <span className="whitespace-nowrap">Nova Categoria</span>
                   </Button>
                 </div>
               </div>
@@ -151,7 +152,7 @@ export default function Admin() {
                   <>
                     {/* Card View */}
                     {viewMode === "cards" && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
                         {categories.map((category: Category) => (
                           <CategoryItem
                             key={category.id}
