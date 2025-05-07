@@ -19,6 +19,7 @@ import ViewToggle from "@/components/admin/ViewToggle";
 import CategoryList from "@/components/admin/CategoryList";
 import SortableResourceList from "@/components/admin/SortableResourceList";
 import DraggableResourceList from "@/components/admin/DraggableResourceList";
+import TrelloBoard from "@/components/admin/TrelloBoard";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -197,31 +198,14 @@ export default function Admin() {
                     
                     {/* Draggable View - Permite arrastar recursos entre categorias */}
                     {viewMode === "draggable" && (
-                      <DraggableResourceList
+                      <TrelloBoard
                         categories={categories}
                         getResourcesByCategory={getResourcesByCategory}
                         onEditResource={handleEditResource}
-                        onMoveResource={async (resourceId, targetCategoryId) => {
-                          try {
-                            // Atualizar no backend
-                            await apiRequest("PATCH", `/api/resources/${resourceId}`, {
-                              categoryId: targetCategoryId
-                            });
-                            
-                            // Invalidar queries
-                            queryClient.invalidateQueries({ queryKey: ["/api/resources"] });
-                            
-                            toast({
-                              title: "Recurso movido",
-                              description: "O recurso foi movido para outra categoria com sucesso.",
-                            });
-                          } catch (error) {
-                            toast({
-                              title: "Erro ao mover recurso",
-                              description: "Ocorreu um erro ao mover o recurso para outra categoria.",
-                              variant: "destructive",
-                            });
-                          }
+                        onAddResource={handleAddResource}
+                        onEditCategory={(category) => {
+                          // Abre o form de edição da categoria
+                          setShowNewCategoryForm(true);
                         }}
                       />
                     )}

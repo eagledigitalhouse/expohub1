@@ -87,10 +87,10 @@ export default function ResourceItem({ resource, onEdit }: ResourceItemProps) {
   
   return (
     <>
-      <div className="bg-dark border border-dark-border hover:border-primary/30 hover:bg-dark/70 rounded-md p-3 pl-14 flex justify-between items-center group transition-colors relative">
+      <div className="bg-dark border border-dark-border hover:border-primary/30 hover:bg-dark/70 rounded-md p-3 flex justify-between items-start group transition-colors relative">
         <div className="flex items-start overflow-hidden w-[calc(100%-60px)]">
-          <div className="h-8 w-8 rounded bg-primary/10 flex items-center justify-center text-primary/80 flex-shrink-0">
-            <ResourceIcon className="h-4 w-4" />
+          <div className="h-9 w-9 rounded-md bg-primary/10 flex items-center justify-center text-primary/80 flex-shrink-0">
+            <ResourceIcon className="h-5 w-5" />
           </div>
           <div className="ml-3 min-w-0 w-full">
             <h4 className="text-gray-100 text-sm font-medium truncate leading-tight" title={resource.title}>
