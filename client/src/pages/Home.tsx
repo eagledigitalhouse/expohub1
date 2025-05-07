@@ -5,7 +5,19 @@ import { getIconByName } from "@/lib/utils";
 import { ResourceWithBlocks } from "@/lib/types";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, Filter, Moon, Sun } from "lucide-react";
+import { 
+  ChevronRight, 
+  Filter, 
+  Moon, 
+  Sun, 
+  Grid, 
+  Plus, 
+  FileText, 
+  FileCheck,
+  Users,
+  Calendar,
+  Download
+} from "lucide-react";
 
 // Componentes
 import Navbar from "@/components/Navbar";
@@ -16,6 +28,13 @@ import SearchBar from "@/components/SearchBar";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import ModernSidebar from "@/components/ModernSidebar";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 export default function Home() {
   const [, navigate] = useLocation();
   const [isResourceSidePanelOpen, setIsResourceSidePanelOpen] = useState(false);
@@ -23,6 +42,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredResources, setFilteredResources] = useState<Resource[]>([]);
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   
   const { data: categories = [] } = useQuery<Category[]>({ 
     queryKey: ["/api/categories"] 
@@ -35,6 +55,11 @@ export default function Home() {
   // Toggle theme function
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
+  };
+  
+  // Toggle view mode function
+  const toggleViewMode = () => {
+    setViewMode(viewMode === "grid" ? "list" : "grid");
   };
 
   // Atualizar recursos filtrados quando os recursos ou o termo de busca mudar
@@ -119,28 +144,113 @@ export default function Home() {
             <GreetingHeader />
             
             {/* Área de pesquisa e filtros */}
-            <div className="mb-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              <SearchBar onSearch={handleSearch} />
-              
-              <div className="flex items-center gap-3">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-2.5 rounded-full bg-dark-surface/80 border border-dark-border/50 text-gray-300 hover:bg-dark-surface hover:text-white transition-colors flex items-center"
-                  onClick={toggleTheme}
-                >
-                  {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                </motion.button>
+            <div className="mb-6">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-5">
+                <SearchBar onSearch={handleSearch} />
                 
+                <div className="flex items-center gap-3">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="p-2.5 rounded-full bg-dark-surface/80 border border-dark-border/50 text-gray-300 hover:bg-dark-surface hover:text-white transition-colors flex items-center"
+                    onClick={toggleTheme}
+                  >
+                    {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                  </motion.button>
+                  
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className={`p-2.5 rounded-full ${viewMode === "grid" ? "bg-primary/20 text-primary border border-primary/30" : "bg-dark-surface/80 border border-dark-border/50 text-gray-300 hover:bg-dark-surface hover:text-white"} transition-colors flex items-center`}
+                          onClick={toggleViewMode}
+                        >
+                          {/* Alterna entre visualização em grade ou lista */}
+                          <Grid className="h-4 w-4" />
+                        </motion.button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{viewMode === "grid" ? "Visualização em grade" : "Visualização em lista"}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-4 py-2.5 rounded-full bg-dark-surface/80 border border-dark-border/50 text-gray-300 hover:bg-dark-surface hover:text-white transition-colors flex items-center"
+                  >
+                    <Filter className="h-4 w-4 mr-2" />
+                    <span>Filtrar</span>
+                  </motion.button>
+                  
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          disabled
+                          className="p-2.5 rounded-full bg-primary/20 text-primary/60 flex items-center cursor-not-allowed"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </motion.button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Entre no modo Admin para adicionar</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </div>
+              
+              {/* Tags de filtros rápidos */}
+              <div className="flex flex-wrap gap-2 mb-4">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-4 py-2.5 rounded-full bg-dark-surface/80 border border-dark-border/50 text-gray-300 hover:bg-dark-surface hover:text-white transition-colors flex items-center"
+                  className="px-3 py-1.5 rounded-full bg-dark-surface/40 border border-dark-border/30 text-gray-300 hover:bg-dark-surface hover:text-white transition-colors flex items-center text-xs font-medium"
                 >
-                  <Filter className="h-4 w-4 mr-2" />
-                  <span>Filtrar</span>
+                  <FileText className="h-3 w-3 mr-1.5" />
+                  Documentos
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-3 py-1.5 rounded-full bg-dark-surface/40 border border-dark-border/30 text-gray-300 hover:bg-dark-surface hover:text-white transition-colors flex items-center text-xs font-medium"
+                >
+                  <FileCheck className="h-3 w-3 mr-1.5" />
+                  Checklists
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-3 py-1.5 rounded-full bg-dark-surface/40 border border-dark-border/30 text-gray-300 hover:bg-dark-surface hover:text-white transition-colors flex items-center text-xs font-medium"
+                >
+                  <Users className="h-3 w-3 mr-1.5" />
+                  Contatos
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-3 py-1.5 rounded-full bg-dark-surface/40 border border-dark-border/30 text-gray-300 hover:bg-dark-surface hover:text-white transition-colors flex items-center text-xs font-medium"
+                >
+                  <Calendar className="h-3 w-3 mr-1.5" />
+                  Datas
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-3 py-1.5 rounded-full bg-dark-surface/40 border border-dark-border/30 text-gray-300 hover:bg-dark-surface hover:text-white transition-colors flex items-center text-xs font-medium"
+                >
+                  <Download className="h-3 w-3 mr-1.5" />
+                  Downloads
                 </motion.button>
               </div>
+              
+              <div className="h-px bg-dark-border/40 my-6" />
             </div>
           
             {/* Resultados da pesquisa, se houver */}
@@ -205,37 +315,92 @@ export default function Home() {
                       </motion.button>
                     </div>
                     
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                      {categoryResources.map((resource: Resource) => {
-                        // Determine o ícone apropriado com base no título do recurso
-                        const resourceIconName = resource.title.toLowerCase().includes("checklist") 
-                          ? "FileCheck" 
-                          : resource.title.toLowerCase().includes("documento") 
-                            ? "FileText" 
-                            : resource.title.toLowerCase().includes("orientaç") 
-                              ? "Info" 
-                              : resource.title.toLowerCase().includes("horário") 
-                                ? "Clock" 
-                                : resource.title.toLowerCase().includes("contato") 
-                                  ? "Users" 
-                                  : resource.title.toLowerCase().includes("gráfico") 
-                                    ? "Image" 
-                                    : resource.title.toLowerCase().includes("anúncio") 
-                                      ? "MegaPhone" 
-                                      : "FileText";
-                                      
-                        const ResourceIcon = getIconByName(resourceIconName);
-                        
-                        return (
-                          <ModernResourceCard
-                            key={resource.id}
-                            resource={resource}
-                            icon={ResourceIcon}
-                            onClick={() => openResourceSidePanel(resource)}
-                          />
-                        );
-                      })}
-                    </div>
+                    <div className="h-px bg-dark-border/30 mb-6"></div>
+                    
+                    {viewMode === "grid" ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {categoryResources.map((resource: Resource) => {
+                          // Determine o ícone apropriado com base no título do recurso
+                          const resourceIconName = resource.title.toLowerCase().includes("checklist") 
+                            ? "FileCheck" 
+                            : resource.title.toLowerCase().includes("documento") 
+                              ? "FileText" 
+                              : resource.title.toLowerCase().includes("orientaç") 
+                                ? "Info" 
+                                : resource.title.toLowerCase().includes("horário") 
+                                  ? "Clock" 
+                                  : resource.title.toLowerCase().includes("contato") 
+                                    ? "Users" 
+                                    : resource.title.toLowerCase().includes("gráfico") 
+                                      ? "Image" 
+                                      : resource.title.toLowerCase().includes("anúncio") 
+                                        ? "MegaPhone" 
+                                        : "FileText";
+                                        
+                          const ResourceIcon = getIconByName(resourceIconName);
+                          
+                          return (
+                            <ModernResourceCard
+                              key={resource.id}
+                              resource={resource}
+                              icon={ResourceIcon}
+                              onClick={() => openResourceSidePanel(resource)}
+                            />
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      // Visualização em lista
+                      <div className="space-y-3">
+                        {categoryResources.map((resource: Resource) => {
+                          // Determine o ícone apropriado com base no título do recurso
+                          const resourceIconName = resource.title.toLowerCase().includes("checklist") 
+                            ? "FileCheck" 
+                            : resource.title.toLowerCase().includes("documento") 
+                              ? "FileText" 
+                              : resource.title.toLowerCase().includes("orientaç") 
+                                ? "Info" 
+                                : resource.title.toLowerCase().includes("horário") 
+                                  ? "Clock" 
+                                  : resource.title.toLowerCase().includes("contato") 
+                                    ? "Users" 
+                                    : resource.title.toLowerCase().includes("gráfico") 
+                                      ? "Image" 
+                                      : resource.title.toLowerCase().includes("anúncio") 
+                                        ? "MegaPhone" 
+                                        : "FileText";
+                                        
+                          const ResourceIcon = getIconByName(resourceIconName);
+                          
+                          // Visualização em lista
+                          return (
+                            <motion.div
+                              key={resource.id}
+                              whileHover={{ y: -3, x: 3 }}
+                              onClick={() => openResourceSidePanel(resource)}
+                              className="flex items-center p-4 bg-dark-surface/50 backdrop-blur-sm border border-dark-border/40 rounded-xl cursor-pointer transition-all hover:bg-dark-surface/80 hover:border-dark-border/60"
+                            >
+                              <div className="mr-4 h-10 w-10 flex-shrink-0 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                                <ResourceIcon className="h-5 w-5" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="text-white font-semibold truncate">{resource.title}</h3>
+                                <p className="text-gray-400 text-sm truncate">{resource.description}</p>
+                              </div>
+                              <div className="flex-shrink-0 ml-4">
+                                {resource.readTime && (
+                                  <div className="flex items-center text-gray-400 text-xs">
+                                    <Clock className="h-3 w-3 mr-1" />
+                                    <span>{resource.readTime} min</span>
+                                  </div>
+                                )}
+                              </div>
+                              <ChevronRight className="h-4 w-4 text-gray-400 ml-2 flex-shrink-0" />
+                            </motion.div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </motion.div>
                 );
               })}
