@@ -5,13 +5,13 @@ import { getIconByName } from "@/lib/utils";
 import { ResourceWithBlocks } from "@/lib/types";
 import Navbar from "@/components/Navbar";
 import ResourceCard from "@/components/ResourceCard";
-import ResourceDrawer from "@/components/ResourceDrawer";
+import ResourceModal from "@/components/ResourceModal";
 import CategoryHeader from "@/components/CategoryHeader";
 import { useLocation } from "wouter";
 
 export default function Home() {
   const [, navigate] = useLocation();
-  const [isResourceDrawerOpen, setIsResourceDrawerOpen] = useState(false);
+  const [isResourceModalOpen, setIsResourceModalOpen] = useState(false);
   const [currentResource, setCurrentResource] = useState<ResourceWithBlocks | null>(null);
   
   const { data: categories } = useQuery({ 
@@ -22,7 +22,7 @@ export default function Home() {
     queryKey: ["/api/resources"] 
   });
   
-  const openResourceDrawer = async (resource: Resource) => {
+  const openResourceModal = async (resource: Resource) => {
     try {
       const response = await fetch(`/api/resources/${resource.id}/blocks`);
       if (!response.ok) throw new Error("Failed to fetch resource blocks");
@@ -34,14 +34,14 @@ export default function Home() {
         blocks
       });
       
-      setIsResourceDrawerOpen(true);
+      setIsResourceModalOpen(true);
     } catch (error) {
       console.error("Error fetching resource blocks:", error);
     }
   };
   
-  const closeResourceDrawer = () => {
-    setIsResourceDrawerOpen(false);
+  const closeResourceModal = () => {
+    setIsResourceModalOpen(false);
   };
   
   const handleToggleView = () => {
@@ -53,17 +53,17 @@ export default function Home() {
   };
   
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
       <Navbar isAdmin={false} onToggleView={handleToggleView} />
       
-      <main className="flex-1 py-6 px-4 sm:px-6 lg:px-8">
+      <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <header className="mb-8">
-            <h1 className="text-2xl font-bold text-white">Recursos para Expositores</h1>
-            <p className="mt-2 text-gray-400">Todos os materiais e informações que você precisa para seu estande no evento.</p>
+          <header className="mb-10 text-center">
+            <h1 className="text-3xl font-bold text-white mb-3">Central de Recursos para Expositores</h1>
+            <p className="text-gray-400 max-w-2xl mx-auto">Todos os materiais e informações essenciais para que você tenha sucesso em sua participação no evento.</p>
           </header>
           
-          <div className="space-y-10">
+          <div className="space-y-12">
             {categories?.map((category: Category) => {
               const categoryResources = getResourcesByCategory(category.id);
               const CategoryIcon = getIconByName(category.icon as any || "Package");
@@ -71,13 +71,13 @@ export default function Home() {
               if (categoryResources.length === 0) return null;
               
               return (
-                <div key={category.id} className="mb-10">
+                <div key={category.id} className="mb-12">
                   <CategoryHeader 
                     title={category.name} 
                     icon={CategoryIcon} 
                   />
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
                     {categoryResources.map((resource: Resource) => {
                       // Determine the appropriate icon based on resource title
                       const resourceIconName = resource.title.toLowerCase().includes("checklist") 
@@ -103,7 +103,7 @@ export default function Home() {
                           key={resource.id}
                           resource={resource}
                           icon={ResourceIcon}
-                          onClick={() => openResourceDrawer(resource)}
+                          onClick={() => openResourceModal(resource)}
                         />
                       );
                     })}
@@ -113,17 +113,19 @@ export default function Home() {
             })}
             
             {!categories?.length && (
-              <div className="text-center py-8">
-                <p className="text-gray-400">Nenhuma categoria disponível.</p>
+              <div className="text-center py-16 px-4 bg-dark-surface border border-dark-border rounded-lg">
+                <div className="text-4xl mb-4">📚</div>
+                <h3 className="text-xl font-medium text-white mb-2">Nenhuma categoria disponível</h3>
+                <p className="text-gray-400">Os recursos serão adicionados em breve.</p>
               </div>
             )}
           </div>
         </div>
       </main>
       
-      <ResourceDrawer 
-        isOpen={isResourceDrawerOpen}
-        onClose={closeResourceDrawer}
+      <ResourceModal 
+        isOpen={isResourceModalOpen}
+        onClose={closeResourceModal}
         currentResource={currentResource}
       />
     </div>
