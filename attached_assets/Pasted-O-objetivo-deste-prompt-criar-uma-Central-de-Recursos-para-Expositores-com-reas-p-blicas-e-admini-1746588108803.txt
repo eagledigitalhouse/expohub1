@@ -1,0 +1,47 @@
+O objetivo deste prompt é criar uma Central de Recursos para Expositores com áreas públicas e administrativas, garantindo uma interface moderna e funcional. O resultado esperado é um sistema intuitivo que permita fácil acesso e gerenciamento de conteúdos por expositores e administradores.
+
+Descrição do Projeto
+
+Desenvolver uma Central de Recursos para Expositores com duas áreas principais: Pública e Administrativa.
+Área Pública
+
+Objetivo: Permitir que os expositores acessem conteúdos organizados de forma intuitiva.
+Funcionalidades:
+Exibição de conteúdos em formato de cards.
+Ao clicar em um card, abrir um painel (drawer ou modal) com design moderno.
+O painel deve ser dividido em blocos, apresentando informações de forma clara e organizada.
+Área Administrativa
+
+Objetivo: Permitir ao produtor do evento gerenciar categorias e recursos de forma eficiente.
+Funcionalidades:
+Criar e editar categorias.
+Adicionar novos recursos a essas categorias.
+Montar cada recurso utilizando blocos modulares de conteúdo.
+Visualizar a apresentação final do recurso antes da publicação.
+Tipos de Blocos Disponíveis
+
+A plataforma deve incluir os seguintes tipos de blocos que podem ser utilizados no builder:
+✅ Checklist
+⚠️ Alerta ou dica
+🧠 Texto explicativo
+📋 Texto copiável com botão
+📁 Arquivo para download
+🔗 Link externo
+🎬 Embed de vídeo
+🟧 Bloco personalizado (texto livre ou HTML)
+Funcionalidades do Painel Administrativo
+
+O painel deve permitir:
+Adicionar novos blocos.
+Reordenar blocos existentes.
+Excluir blocos de forma fácil e intuitiva.
+O estilo do painel deve ser semelhante ao Elementor ou Notion.
+Design e Estilização
+
+O layout deve ter um visual escuro, moderno e responsivo.
+Os blocos devem ser bem separados, utilizando ícones e cores de destaque como laranja moderno, cinza escuro e branco suave.
+Utilize Tailwind + shadcn/ui para a estilização.
+Critérios de Qualidade
+
+A interface deve ser intuitiva e fácil de navegar tanto para expositores quanto para administradores.
+O design deve ser responsivo e visualmente atraente, garantindo uma boa experiência do usuário.
