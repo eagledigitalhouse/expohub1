@@ -87,44 +87,47 @@ export default function ResourceItem({ resource, onEdit }: ResourceItemProps) {
   
   return (
     <>
-      <div className="bg-dark border border-dark-border hover:border-primary/30 hover:bg-dark/70 rounded-md p-2 flex justify-between items-center group transition-colors relative">
-        <div className="flex items-start overflow-hidden w-[calc(100%-50px)]">
-          <div className="h-6 w-6 rounded bg-primary/5 flex items-center justify-center text-primary/80 flex-shrink-0 mt-0.5">
-            <ResourceIcon className="h-3 w-3" />
+      <div className="bg-dark border border-dark-border hover:border-primary/30 hover:bg-dark/70 rounded-md p-3 flex justify-between items-center group transition-colors relative">
+        <div className="flex items-start overflow-hidden w-[calc(100%-60px)]">
+          <div className="h-8 w-8 rounded bg-primary/10 flex items-center justify-center text-primary/80 flex-shrink-0">
+            <ResourceIcon className="h-4 w-4" />
           </div>
-          <div className="ml-2 min-w-0 w-full">
-            <h4 className="text-gray-200 text-xs font-medium truncate leading-tight" title={resource.title}>
+          <div className="ml-3 min-w-0 w-full">
+            <h4 className="text-gray-100 text-sm font-medium truncate leading-tight" title={resource.title}>
               {resource.title}
             </h4>
-            <div className="flex items-center text-xs text-gray-500 mt-0.5 w-full">
-              <span className="text-[10px] truncate max-w-[70%]">{date}</span>
+            <div className="flex items-center text-xs text-gray-400 mt-1 w-full">
+              <span className="truncate max-w-[70%]">{date}</span>
               {resource.readTime && (
                 <>
-                  <span className="mx-1 text-[8px] text-gray-600 flex-shrink-0">•</span>
-                  <span className="text-[10px] whitespace-nowrap flex-shrink-0">{resource.readTime} min</span>
+                  <span className="mx-1.5 text-[10px] text-gray-500 flex-shrink-0">•</span>
+                  <div className="flex items-center whitespace-nowrap flex-shrink-0">
+                    <Clock className="h-3 w-3 mr-1 text-gray-500" />
+                    <span>{resource.readTime} min</span>
+                  </div>
                 </>
               )}
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-1 ml-2 flex-shrink-0">
+        <div className="flex items-center gap-1.5 ml-2 flex-shrink-0">
           <Button
             size="icon"
             variant="ghost"
-            className="h-5 w-5 text-gray-500 hover:text-primary hover:bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity focus:opacity-100 sm:opacity-100"
+            className="h-7 w-7 text-gray-400 hover:text-primary hover:bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity focus:opacity-100"
             onClick={handleEditClick}
             title="Editar recurso"
           >
-            <Edit className="h-2.5 w-2.5" />
+            <Edit className="h-3.5 w-3.5" />
           </Button>
           <Button
             size="icon"
             variant="ghost"
-            className="h-5 w-5 text-gray-500 hover:text-destructive hover:bg-destructive/5 opacity-0 group-hover:opacity-100 transition-opacity focus:opacity-100 sm:opacity-100"
+            className="h-7 w-7 text-gray-400 hover:text-destructive hover:bg-destructive/5 opacity-0 group-hover:opacity-100 transition-opacity focus:opacity-100"
             onClick={handleDeleteClick}
             title="Excluir recurso"
           >
-            <Trash className="h-2.5 w-2.5" />
+            <Trash className="h-3.5 w-3.5" />
           </Button>
         </div>
       </div>

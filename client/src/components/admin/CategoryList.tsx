@@ -271,7 +271,7 @@ export default function CategoryList({
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
         <SortableContext 
           items={items.map(item => item.id)}
           strategy={horizontalListSortingStrategy}
@@ -283,7 +283,7 @@ export default function CategoryList({
             return (
               <div 
                 key={category.id}
-                className={`relative ${isOver ? 'ring-2 ring-primary ring-opacity-70 rounded-lg' : ''}`}
+                className={`relative transition-all ${isOver ? 'ring-2 ring-primary shadow-lg shadow-primary/20 ring-opacity-70 rounded-lg scale-[1.01]' : ''}`}
               >
                 <SortableCategory
                   category={category}
@@ -291,6 +291,9 @@ export default function CategoryList({
                   onEditResource={onEditResource}
                   onAddResource={onAddResource}
                 />
+                {isOver && (
+                  <div className="absolute inset-0 bg-primary/5 rounded-lg pointer-events-none z-0"></div>
+                )}
               </div>
             );
           })}
@@ -298,8 +301,18 @@ export default function CategoryList({
       </div>
       
       <DragOverlay>
-        {activeId && activeResource && (
-          <div className="opacity-80">
+        {activeId && !activeId.startsWith('resource-') && (
+          <div className="opacity-90 w-full max-w-sm">
+            <SortableCategory
+              category={items.find(item => item.id.toString() === activeId) || items[0]}
+              resources={[]}
+              onEditResource={() => {}}
+              onAddResource={() => {}}
+            />
+          </div>
+        )}
+        {activeId && activeResource && activeId.startsWith('resource-') && (
+          <div className="opacity-90 w-full max-w-sm shadow-xl">
             <ResourceItem 
               resource={activeResource}
               onEdit={() => {}}

@@ -87,19 +87,21 @@ export default function CategoryItem({
   
   return (
     <Card className="bg-dark-surface border-dark-border h-full overflow-hidden">
-      <CardHeader className="p-3 pb-2.5 sm:p-4 sm:pb-3">
-        <div className="flex justify-between items-start">
-          <div className="flex items-start min-w-0 pr-2">
-            <div className="h-9 w-9 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-3 flex-shrink-0 mt-0.5">
+      <CardHeader className="p-4 pb-3">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center min-w-0 pr-2">
+            <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-3 flex-shrink-0">
               <CategoryIcon className="h-5 w-5" />
             </div>
-            <div className="min-w-0 flex items-center">
-              <CardTitle className="text-base sm:text-lg text-white truncate leading-5" title={category.name}>
+            <div className="min-w-0">
+              <CardTitle className="text-lg text-white truncate leading-tight" title={category.name}>
                 {category.name}
               </CardTitle>
-              <Badge className="ml-2 h-5 px-2 bg-primary/15 text-primary border-0 font-medium text-xs">
-                {resources.length}
-              </Badge>
+              <div className="flex items-center mt-1">
+                <Badge className="h-6 px-2.5 bg-primary/15 text-primary border-0 font-medium text-xs">
+                  {resources.length} recurso{resources.length !== 1 ? 's' : ''}
+                </Badge>
+              </div>
             </div>
           </div>
           
@@ -107,23 +109,23 @@ export default function CategoryItem({
             <Button
               size="icon"
               variant="ghost"
-              className="h-6 w-6 sm:h-7 sm:w-7 text-gray-400 hover:text-primary hover:bg-primary/5"
+              className="h-8 w-8 text-gray-400 hover:text-primary hover:bg-primary/5"
               onClick={handleEditClick}
               title="Configurações da categoria"
             >
-              <Settings className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+              <Settings className="h-4 w-4" />
             </Button>
           </div>
         </div>
       </CardHeader>
       
-      <CardContent className="px-3 pt-0 pb-3 sm:px-4 sm:pb-2 flex-grow">
+      <CardContent className="px-4 py-3 flex-grow">
         {resources.length === 0 ? (
-          <div className="text-center py-2 sm:py-3 px-2 sm:px-3 bg-dark/50 border border-dashed border-dark-border rounded-lg mb-2">
-            <p className="text-gray-500 text-xs">Nenhum recurso nesta categoria</p>
+          <div className="text-center py-6 px-3 bg-dark/50 border border-dashed border-dark-border rounded-lg mb-2">
+            <p className="text-gray-400 text-sm">Nenhum recurso nesta categoria</p>
           </div>
         ) : (
-          <div className="grid gap-1 sm:gap-1.5">
+          <div className="grid gap-2">
             {resources.map((resource) => (
               <div 
                 key={resource.id} 
@@ -132,15 +134,17 @@ export default function CategoryItem({
                 className="resource-item group hover:cursor-grab active:cursor-grabbing"
               >
                 <div className="relative">
-                  <div className="absolute left-0 top-0 bottom-0 w-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="w-1 h-5 bg-gray-500/30 rounded-full"></div>
+                  <div className="absolute left-3 top-0 bottom-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                    <div className="flex flex-col space-y-1">
+                      <div className="w-4 h-0.5 bg-gray-400 rounded-full"></div>
+                      <div className="w-4 h-0.5 bg-gray-400 rounded-full"></div>
+                      <div className="w-4 h-0.5 bg-gray-400 rounded-full"></div>
+                    </div>
                   </div>
-                  <div className="pl-6">
-                    <ResourceItem 
-                      resource={resource}
-                      onEdit={() => onEditResource(resource)}
-                    />
-                  </div>
+                  <ResourceItem 
+                    resource={resource}
+                    onEdit={() => onEditResource(resource)}
+                  />
                 </div>
               </div>
             ))}
@@ -148,15 +152,15 @@ export default function CategoryItem({
         )}
       </CardContent>
       
-      <div className="px-3 pb-3 sm:px-4 sm:pb-4 mt-auto">
+      <div className="px-4 pb-4 pt-2 mt-auto border-t border-dark-border/30">
         <Button
-          size="sm"
+          size="default"
           variant="default"
-          className="h-8 w-full bg-primary text-white hover:bg-primary/90 flex items-center justify-center px-3.5 text-xs rounded-md"
+          className="w-full bg-primary text-white hover:bg-primary/90 flex items-center justify-center gap-2"
           onClick={handleAddResourceClick}
         >
-          <Plus className="h-3.5 w-3.5 mr-2" />
-          <span className="whitespace-nowrap font-medium">Adicionar</span>
+          <Plus className="h-4 w-4" />
+          <span className="whitespace-nowrap font-medium">Adicionar Recurso</span>
         </Button>
       </div>
       
