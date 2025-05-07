@@ -5,7 +5,7 @@ import { getIconByName } from "@/lib/utils";
 
 interface ResourceItemProps {
   resource: Resource;
-  onEdit: () => void;
+  onEdit: (e?: React.MouseEvent) => void;
 }
 
 export default function ResourceItem({ resource, onEdit }: ResourceItemProps) {

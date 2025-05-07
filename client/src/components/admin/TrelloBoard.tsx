@@ -11,7 +11,9 @@ import {
   DragOverEvent,
   DragOverlay,
   useSensor,
-  useSensors
+  useSensors,
+  DraggableAttributes,
+  Active
 } from "@dnd-kit/core";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { useToast } from "@/hooks/use-toast";
@@ -20,6 +22,8 @@ import { apiRequest } from "@/lib/queryClient";
 import ResourceItem from "./ResourceItem";
 import { getIconByName } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Draggable } from "./Draggable";
+import { Droppable } from "./Droppable";
 
 interface TrelloBoardProps {
   categories: Category[];
@@ -45,16 +49,17 @@ export default function TrelloBoard({
   
   const sensors = useSensors(
     useSensor(MouseSensor, {
-      // Configuração para o mouse requer um pequeno movimento para iniciar o arrasto
+      // Ativar o drag imediatamente com menor distância
       activationConstraint: {
-        distance: 5, // Distância em pixels antes de iniciar o arrasto
+        distance: 3,
+        tolerance: 5,
       }
     }),
     useSensor(TouchSensor, {
-      // Configuração para touch é um pouco mais sensível
+      // Configuração para touch com tolerância maior
       activationConstraint: {
-        delay: 150, // Pequeno delay em ms antes de iniciar o arrasto
-        tolerance: 5, // Tolerância em pixels para considerar um toque como arrasto
+        delay: 100,
+        tolerance: 10,
       }
     })
   );
@@ -188,12 +193,14 @@ export default function TrelloBoard({
             <div 
               key={category.id}
               id={category.id.toString()}
-              className={`flex flex-col flex-shrink-0 bg-dark-surface border border-dark-border rounded-lg w-[320px] shadow-md ${
-                isOver ? 'ring-2 ring-primary shadow-lg shadow-primary/20' : ''
+              className={`flex flex-col flex-shrink-0 bg-dark-surface border border-dark-border rounded-lg w-[320px] shadow-md transition-all ${
+                isOver ? 'ring-2 ring-primary shadow-lg shadow-primary/20 border-primary/30' : ''
               }`}
             >
               {/* Cabeçalho */}
-              <div className="p-3 border-b border-dark-border flex items-center justify-between">
+              <div 
+                className="p-3 border-b border-dark-border flex items-center justify-between cursor-move"
+              >
                 <div className="flex items-center">
                   <div className="h-9 w-9 rounded-md bg-primary/10 flex items-center justify-center text-primary mr-3">
                     <CategoryIcon className="h-5 w-5" />
@@ -207,7 +214,10 @@ export default function TrelloBoard({
                   size="icon"
                   variant="ghost"
                   className="h-8 w-8 text-gray-400 hover:text-primary hover:bg-primary/5"
-                  onClick={() => onEditCategory(category)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEditCategory(category);
+                  }}
                 >
                   <Settings className="h-4 w-4" />
                 </Button>
@@ -225,13 +235,16 @@ export default function TrelloBoard({
                       <div
                         key={resource.id}
                         id={`resource-${resource.id}`}
-                        className="mb-2 cursor-grab active:cursor-grabbing"
+                        className="mb-2 cursor-grab active:cursor-grabbing touch-manipulation"
                         data-resource-id={resource.id}
                         data-category-id={category.id}
                       >
                         <ResourceItem
                           resource={resource}
-                          onEdit={() => onEditResource(resource)}
+                          onEdit={(e) => {
+                            e?.stopPropagation();
+                            onEditResource(resource);
+                          }}
                         />
                       </div>
                     ))}
@@ -244,7 +257,10 @@ export default function TrelloBoard({
                 <Button
                   variant="default"
                   className="w-full bg-primary text-white hover:bg-primary/90 flex items-center justify-center gap-2"
-                  onClick={() => onAddResource(category.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onAddResource(category.id);
+                  }}
                 >
                   <Plus className="h-4 w-4" />
                   <span>Adicionar Recurso</span>
@@ -255,12 +271,12 @@ export default function TrelloBoard({
         })}
       </div>
       
-      <DragOverlay adjustScale={true} zIndex={999} dropAnimation={{
+      <DragOverlay adjustScale={false} zIndex={999} dropAnimation={{
         duration: 150,
         easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
       }}>
         {activeId && activeResource && activeId.startsWith('resource-') && (
-          <div className="w-[280px] opacity-95 shadow-xl">
+          <div className="w-[300px] shadow-xl">
             <ResourceItem 
               resource={activeResource}
               onEdit={() => {}}
